@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/tensor_test.dir/test_tensor.cpp.o -o tensor_test  ../libtensor_lib.a ../lib/libgtest_main.a ../lib/libgtest.a 

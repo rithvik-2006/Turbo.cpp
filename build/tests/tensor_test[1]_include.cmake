@@ -1,0 +1,5 @@
+if(EXISTS "/home/manne-rithvik/CodingStuff/turbo.cpp/build/tests/tensor_test[1]_tests.cmake")
+  include("/home/manne-rithvik/CodingStuff/turbo.cpp/build/tests/tensor_test[1]_tests.cmake")
+else()
+  add_test(tensor_test_NOT_BUILT tensor_test_NOT_BUILT)
+endif()
