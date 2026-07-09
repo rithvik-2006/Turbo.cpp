@@ -1,6 +1,8 @@
 #include "../include/tensor.hpp"
 #include <algorithm>
+#include <cstddef>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -200,6 +202,62 @@ Tensor Tensor::operator+(const Tensor &other) const {
   return result;
 }
 
+Tensor Tensor::matmul(const Tensor &other) const {
+  if (this->get_shape().size() != 2 || other.get_shape().size() != 2) {
+    throw invalid_argument("matmul only supports 2D tensors");
+  }
+
+  size_t M = this->get_shape()[0];
+  size_t K = this->get_shape()[1];
+  size_t N = other.get_shape()[1];
+
+  if (K != other.get_shape()[0]) {
+    throw invalid_argument("Inner dimensions must match");
+  }
+
+  vector<float> zeros(M * N, 0.0f);
+  Tensor result(zeros, {M, N});
+  const float *A_ptr = this->storage->data.data();
+  const float *B_ptr = other.storage->data.data();
+  float *C_ptr = result.storage->data.data();
+  size_t stride_A = this->strides[0];
+  size_t stride_B = other.strides[0];
+  size_t stride_C = result.strides[0];
+
+  // Define the Block Size (Tile Size)
+  // 64 floats = 256 bytes per row. A 64x64 block easily fits in a standard 32KB
+  // L1 Cache.
+  const size_t T = 64;
+
+  // --- OUTER LOOPS: Iterate over blocks ---
+  for (size_t i0 = 0; i0 < M; i0 += T) {
+    for (size_t k0 = 0; k0 < K; k0 += T) {
+      for (size_t j0 = 0; j0 < N; j0 += T) {
+
+        // --- INNER LOOPS: Cache-friendly IKJ multiplication within the block
+        // --- We use std::min to prevent out-of-bounds reads if the matrix
+        // dimensions are not perfectly divisible by the block size T.
+        size_t i_end = std::min(i0 + T, M);
+        size_t k_end = std::min(k0 + T, K);
+        size_t j_end = std::min(j0 + T, N);
+
+        for (size_t i = i0; i < i_end; i++) {
+          for (size_t k = k0; k < k_end; k++) {
+
+            // Raw pointer math replaces the .at() function
+            float a_val = A_ptr[i * stride_A + k];
+
+            for (size_t j = j0; j < j_end; j++) {
+              C_ptr[i * stride_C + j] += a_val * B_ptr[k * stride_B + j];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return result;
+}
 // --- Indexing ---
 
 float &Tensor::at(const vector<size_t> &indices) {

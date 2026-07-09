@@ -68,6 +68,8 @@ public:
   // Math Operations
   Tensor operator+(const Tensor &other) const;
 
+  // Matrix Multiplication
+  Tensor matmul(const Tensor &other) const;
   // Indexing
   float &at(const std::vector<size_t> &indices);
   const float &at(const std::vector<size_t> &indices) const;
