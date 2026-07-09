@@ -1,10 +1,9 @@
 #include "../include/tensor.hpp"
 #include <algorithm>
 #include <cstddef>
+#include <immintrin.h>
 #include <iostream>
-#include <limits>
 #include <stdexcept>
-#include <string>
 #include <utility>
 
 using namespace std;
@@ -247,7 +246,24 @@ Tensor Tensor::matmul(const Tensor &other) const {
             // Raw pointer math replaces the .at() function
             float a_val = A_ptr[i * stride_A + k];
 
-            for (size_t j = j0; j < j_end; j++) {
+            // 1. Broadcast the scalar 'a_val' into a 256-bit YMM register.
+            __m256 a_vec = _mm256_set1_ps(a_val);
+            size_t j = j0;
+
+            // 2. The Vectorized Inner Loop (Process 8 floats at a time)
+            for (; j + 7 < j_end; j += 8) {
+              __m256 b_vec = _mm256_loadu_ps(&B_ptr[k * stride_B + j]);
+              __m256 c_vec = _mm256_loadu_ps(&C_ptr[i * stride_C + j]);
+
+              // 3. Fused Multiply-Add (FMA)
+              c_vec = _mm256_fmadd_ps(a_vec, b_vec, c_vec);
+
+              // Store the 8 computed floats back into C
+              _mm256_storeu_ps(&C_ptr[i * stride_C + j], c_vec);
+            }
+
+            // 4. The "Tail" Loop (for dimensions not perfectly divisible by 8)
+            for (; j < j_end; j++) {
               C_ptr[i * stride_C + j] += a_val * B_ptr[k * stride_B + j];
             }
           }
