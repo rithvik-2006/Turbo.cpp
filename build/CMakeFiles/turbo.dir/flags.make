@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/manne-rithvik/CodingStuff/turbo.cpp/include
 
-CXX_FLAGS = -std=gnu++17
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -mavx2 -mfma -fopenmp -O3 -fopenmp
 

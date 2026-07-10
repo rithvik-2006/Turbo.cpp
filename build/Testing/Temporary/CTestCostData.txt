@@ -1,5 +1,0 @@
-TensorTest.Initialization 1 0.00293866
-TensorTest.Indexing 1 0.00168659
-TensorTest.BroadcastingAddition 1 0.00234131
-TensorTest.ViewManipulations 1 0.00242547
----

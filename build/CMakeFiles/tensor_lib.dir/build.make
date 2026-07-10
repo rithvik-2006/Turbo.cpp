@@ -69,28 +69,28 @@ include CMakeFiles/tensor_lib.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/tensor_lib.dir/flags.make
 
-CMakeFiles/tensor_lib.dir/src/tensor.cpp.o: CMakeFiles/tensor_lib.dir/flags.make
-CMakeFiles/tensor_lib.dir/src/tensor.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor.cpp
-CMakeFiles/tensor_lib.dir/src/tensor.cpp.o: CMakeFiles/tensor_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tensor_lib.dir/src/tensor.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tensor_lib.dir/src/tensor.cpp.o -MF CMakeFiles/tensor_lib.dir/src/tensor.cpp.o.d -o CMakeFiles/tensor_lib.dir/src/tensor.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor.cpp
+CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o: CMakeFiles/tensor_lib.dir/flags.make
+CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor/tensor.cpp
+CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o: CMakeFiles/tensor_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o -MF CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o.d -o CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor/tensor.cpp
 
-CMakeFiles/tensor_lib.dir/src/tensor.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_lib.dir/src/tensor.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor.cpp > CMakeFiles/tensor_lib.dir/src/tensor.cpp.i
+CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor/tensor.cpp > CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.i
 
-CMakeFiles/tensor_lib.dir/src/tensor.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_lib.dir/src/tensor.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor.cpp -o CMakeFiles/tensor_lib.dir/src/tensor.cpp.s
+CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor/tensor.cpp -o CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.s
 
 # Object files for target tensor_lib
 tensor_lib_OBJECTS = \
-"CMakeFiles/tensor_lib.dir/src/tensor.cpp.o"
+"CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o"
 
 # External object files for target tensor_lib
 tensor_lib_EXTERNAL_OBJECTS =
 
-libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/tensor.cpp.o
+libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/build.make
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libtensor_lib.a"

@@ -63,6 +63,7 @@ CMAKE_BINARY_DIR = /home/manne-rithvik/CodingStuff/turbo.cpp/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/benchmark_gemm.dir/all
 all: CMakeFiles/tensor_lib.dir/all
 all: CMakeFiles/turbo.dir/all
 all: tests/all
@@ -73,6 +74,7 @@ preinstall: tests/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/benchmark_gemm.dir/clean
 clean: CMakeFiles/tensor_lib.dir/clean
 clean: CMakeFiles/turbo.dir/clean
 clean: tests/clean
@@ -147,13 +149,39 @@ tests/clean: _deps/googletest-build/clean
 .PHONY : tests/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/benchmark_gemm.dir
+
+# All Build rule for target.
+CMakeFiles/benchmark_gemm.dir/all: CMakeFiles/tensor_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=1,2 "Built target benchmark_gemm"
+.PHONY : CMakeFiles/benchmark_gemm.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/benchmark_gemm.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/benchmark_gemm.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 0
+.PHONY : CMakeFiles/benchmark_gemm.dir/rule
+
+# Convenience name for target.
+benchmark_gemm: CMakeFiles/benchmark_gemm.dir/rule
+.PHONY : benchmark_gemm
+
+# clean rule for target.
+CMakeFiles/benchmark_gemm.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/clean
+.PHONY : CMakeFiles/benchmark_gemm.dir/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/tensor_lib.dir
 
 # All Build rule for target.
 CMakeFiles/tensor_lib.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=9,10 "Built target tensor_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=11,12 "Built target tensor_lib"
 .PHONY : CMakeFiles/tensor_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -179,7 +207,7 @@ CMakeFiles/tensor_lib.dir/clean:
 CMakeFiles/turbo.dir/all: CMakeFiles/tensor_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo.dir/build.make CMakeFiles/turbo.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo.dir/build.make CMakeFiles/turbo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=13,14 "Built target turbo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=15,16 "Built target turbo"
 .PHONY : CMakeFiles/turbo.dir/all
 
 # Build rule for subdir invocation for target.
@@ -207,7 +235,7 @@ tests/CMakeFiles/tensor_test.dir/all: _deps/googletest-build/googletest/CMakeFil
 tests/CMakeFiles/tensor_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=11,12 "Built target tensor_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=13,14 "Built target tensor_test"
 .PHONY : tests/CMakeFiles/tensor_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -233,7 +261,7 @@ tests/CMakeFiles/tensor_test.dir/clean:
 _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=1,2 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=3,4 "Built target gmock"
 .PHONY : _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -260,7 +288,7 @@ _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/all: _deps/googletes
 _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=3,4 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=5,6 "Built target gmock_main"
 .PHONY : _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -286,7 +314,7 @@ _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/clean:
 _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=5,6 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=7,8 "Built target gtest"
 .PHONY : _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -312,7 +340,7 @@ _deps/googletest-build/googletest/CMakeFiles/gtest.dir/clean:
 _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=7,8 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=9,10 "Built target gtest_main"
 .PHONY : _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.

@@ -93,6 +93,8 @@ turbo_EXTERNAL_OBJECTS =
 turbo: CMakeFiles/turbo.dir/src/turbo.cpp.o
 turbo: CMakeFiles/turbo.dir/build.make
 turbo: libtensor_lib.a
+turbo: /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so
+turbo: /usr/lib/x86_64-linux-gnu/libpthread.a
 turbo: CMakeFiles/turbo.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable turbo"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/turbo.dir/link.txt --verbose=$(VERBOSE)

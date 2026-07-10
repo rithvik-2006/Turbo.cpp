@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor.cpp" "CMakeFiles/tensor_lib.dir/src/tensor.cpp.o" "gcc" "CMakeFiles/tensor_lib.dir/src/tensor.cpp.o.d"
+  "/home/manne-rithvik/CodingStuff/turbo.cpp/src/tensor/tensor.cpp" "CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o" "gcc" "CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

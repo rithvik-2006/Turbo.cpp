@@ -1,8 +1,9 @@
-#include "../include/tensor.hpp"
+#include "../../include/turbo/tensor/tensor.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <immintrin.h>
 #include <iostream>
+#include <omp.h>
 #include <stdexcept>
 #include <utility>
 
@@ -201,6 +202,28 @@ Tensor Tensor::operator+(const Tensor &other) const {
   return result;
 }
 
+// --- Static Packing Helpers for Stage 4 ---
+
+static void pack_block_A(const float *A, float *packed_A, size_t i0, size_t k0,
+                         size_t i_end, size_t k_end, size_t stride_A) {
+  size_t idx = 0;
+  for (size_t i = i0; i < i_end; i++) {
+    for (size_t k = k0; k < k_end; k++) {
+      packed_A[idx++] = A[i * stride_A + k];
+    }
+  }
+}
+
+static void pack_block_B(const float *B, float *packed_B, size_t k0, size_t j0,
+                         size_t k_end, size_t j_end, size_t stride_B) {
+  size_t idx = 0;
+  for (size_t k = k0; k < k_end; k++) {
+    for (size_t j = j0; j < j_end; j++) {
+      packed_B[idx++] = B[k * stride_B + j];
+    }
+  }
+}
+
 Tensor Tensor::matmul(const Tensor &other) const {
   if (this->get_shape().size() != 2 || other.get_shape().size() != 2) {
     throw invalid_argument("matmul only supports 2D tensors");
@@ -216,6 +239,7 @@ Tensor Tensor::matmul(const Tensor &other) const {
 
   vector<float> zeros(M * N, 0.0f);
   Tensor result(zeros, {M, N});
+
   const float *A_ptr = this->storage->data.data();
   const float *B_ptr = other.storage->data.data();
   float *C_ptr = result.storage->data.data();
@@ -223,48 +247,63 @@ Tensor Tensor::matmul(const Tensor &other) const {
   size_t stride_B = other.strides[0];
   size_t stride_C = result.strides[0];
 
-  // Define the Block Size (Tile Size)
-  // 64 floats = 256 bytes per row. A 64x64 block easily fits in a standard 32KB
-  // L1 Cache.
   const size_t T = 64;
 
-  // --- OUTER LOOPS: Iterate over blocks ---
+#pragma omp parallel for
   for (size_t i0 = 0; i0 < M; i0 += T) {
+    // Stack-allocate contiguous packing buffers (L1 Cache sized)
+    // 64x64 floats = 16 KB per buffer, aligned to 32 bytes for AVX2 registers.
+    // Allocated inside the parallel loop so each thread has its own private
+    // buffers!
+    alignas(32) float packed_A[T * T];
+    alignas(32) float packed_B[T * T];
+
+    size_t i_end = std::min(i0 + T, M);
+    size_t block_M = i_end - i0;
+
     for (size_t k0 = 0; k0 < K; k0 += T) {
+      size_t k_end = std::min(k0 + T, K);
+      size_t block_K = k_end - k0;
+
+      // Pack the A block once for this row panel
+      pack_block_A(A_ptr, packed_A, i0, k0, i_end, k_end, stride_A);
+
       for (size_t j0 = 0; j0 < N; j0 += T) {
-
-        // --- INNER LOOPS: Cache-friendly IKJ multiplication within the block
-        // --- We use std::min to prevent out-of-bounds reads if the matrix
-        // dimensions are not perfectly divisible by the block size T.
-        size_t i_end = std::min(i0 + T, M);
-        size_t k_end = std::min(k0 + T, K);
         size_t j_end = std::min(j0 + T, N);
+        size_t block_N = j_end - j0;
 
-        for (size_t i = i0; i < i_end; i++) {
-          for (size_t k = k0; k < k_end; k++) {
+        // Pack the B block once for this column panel
+        pack_block_B(B_ptr, packed_B, k0, j0, k_end, j_end, stride_B);
 
-            // Raw pointer math replaces the .at() function
-            float a_val = A_ptr[i * stride_A + k];
+        // --- INNER LOOP: AVX2 Math strictly on Packed Buffers ---
+        for (size_t i = 0; i < block_M; i++) {
+          for (size_t k = 0; k < block_K; k++) {
 
-            // 1. Broadcast the scalar 'a_val' into a 256-bit YMM register.
+            // Read from contiguous packed A
+            float a_val = packed_A[i * block_K + k];
             __m256 a_vec = _mm256_set1_ps(a_val);
-            size_t j = j0;
 
-            // 2. The Vectorized Inner Loop (Process 8 floats at a time)
-            for (; j + 7 < j_end; j += 8) {
-              __m256 b_vec = _mm256_loadu_ps(&B_ptr[k * stride_B + j]);
-              __m256 c_vec = _mm256_loadu_ps(&C_ptr[i * stride_C + j]);
+            size_t j = 0;
 
-              // 3. Fused Multiply-Add (FMA)
+            // Process 8 floats at a time using FMA
+            for (; j + 7 < block_N; j += 8) {
+              // Read from contiguous packed B
+              __m256 b_vec = _mm256_loadu_ps(&packed_B[k * block_N + j]);
+
+              // Load C directly from memory (C is not packed to avoid
+              // write-back overhead)
+              __m256 c_vec =
+                  _mm256_loadu_ps(&C_ptr[(i0 + i) * stride_C + (j0 + j)]);
+
               c_vec = _mm256_fmadd_ps(a_vec, b_vec, c_vec);
 
-              // Store the 8 computed floats back into C
-              _mm256_storeu_ps(&C_ptr[i * stride_C + j], c_vec);
+              _mm256_storeu_ps(&C_ptr[(i0 + i) * stride_C + (j0 + j)], c_vec);
             }
 
-            // 4. The "Tail" Loop (for dimensions not perfectly divisible by 8)
-            for (; j < j_end; j++) {
-              C_ptr[i * stride_C + j] += a_val * B_ptr[k * stride_B + j];
+            // Tail loop for leftovers
+            for (; j < block_N; j++) {
+              C_ptr[(i0 + i) * stride_C + (j0 + j)] +=
+                  a_val * packed_B[k * block_N + j];
             }
           }
         }
@@ -300,6 +339,67 @@ const float &Tensor::at(const vector<size_t> &indices) const {
   return storage->data[flat_index];
 }
 
+// --- Multithreading ---
+void matmul_threaded_packed_avx2(const float *A, const float *B, float *C,
+                                 size_t M, size_t K, size_t N, size_t stride_A,
+                                 size_t stride_B, size_t stride_C) {
+  const size_t T = 64;
+
+#pragma omp parallel
+  {
+    alignas(32) float packed_A[T * T];
+    alignas(32) float packed_B[T * T];
+
+#pragma omp for schedule(dynamic)
+    for (size_t i0 = 0; i0 < M; i0 += T) {
+      size_t i_end = std::min(i0 + T, M);
+      size_t block_M = i_end - i0;
+
+      for (size_t k0 = 0; k0 < K; k0 += T) {
+        size_t k_end = std::min(k0 + T, K);
+        size_t block_K = k_end - k0;
+
+        // Pack A block (Thread-safe: writing to private packed_A)
+        pack_block_A(A, packed_A, i0, k0, i_end, k_end, stride_A);
+
+        for (size_t j0 = 0; j0 < N; j0 += T) {
+          size_t j_end = std::min(j0 + T, N);
+          size_t block_N = j_end - j0;
+
+          // Pack B block (Thread-safe: writing to private packed_B)
+          pack_block_B(B, packed_B, k0, j0, k_end, j_end, stride_B);
+
+          // --- INNER LOOP: AVX2 Math strictly on Packed Buffers ---
+          for (size_t i = 0; i < block_M; i++) {
+            for (size_t k = 0; k < block_K; k++) {
+
+              float a_val = packed_A[i * block_K + k];
+              __m256 a_vec = _mm256_set1_ps(a_val);
+
+              size_t j = 0;
+
+              for (; j + 7 < block_N; j += 8) {
+                __m256 b_vec = _mm256_loadu_ps(&packed_B[k * block_N + j]);
+                // Safe write to C: Every thread has a unique 'i0',
+                // meaning they write to completely disjoint memory addresses.
+                __m256 c_vec =
+                    _mm256_loadu_ps(&C[(i0 + i) * stride_C + (j0 + j)]);
+
+                c_vec = _mm256_fmadd_ps(a_vec, b_vec, c_vec);
+                _mm256_storeu_ps(&C[(i0 + i) * stride_C + (j0 + j)], c_vec);
+              }
+
+              for (; j < block_N; j++) {
+                C[(i0 + i) * stride_C + (j0 + j)] +=
+                    a_val * packed_B[k * block_N + j];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 // --- Utilities ---
 
 void Tensor::print() const {

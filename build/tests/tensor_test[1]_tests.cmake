@@ -6,4 +6,6 @@ add_test([=[TensorTest.BroadcastingAddition]=]  /home/manne-rithvik/CodingStuff/
 set_tests_properties([=[TensorTest.BroadcastingAddition]=]  PROPERTIES WORKING_DIRECTORY /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[TensorTest.ViewManipulations]=]  /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests/tensor_test [==[--gtest_filter=TensorTest.ViewManipulations]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[TensorTest.ViewManipulations]=]  PROPERTIES WORKING_DIRECTORY /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  tensor_test_TESTS TensorTest.Initialization TensorTest.Indexing TensorTest.BroadcastingAddition TensorTest.ViewManipulations)
+add_test([=[TensorTest.MatMul]=]  /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests/tensor_test [==[--gtest_filter=TensorTest.MatMul]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[TensorTest.MatMul]=]  PROPERTIES WORKING_DIRECTORY /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  tensor_test_TESTS TensorTest.Initialization TensorTest.Indexing TensorTest.BroadcastingAddition TensorTest.ViewManipulations TensorTest.MatMul)

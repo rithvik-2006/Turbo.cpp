@@ -94,6 +94,8 @@ tests/tensor_test: tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o
 tests/tensor_test: tests/CMakeFiles/tensor_test.dir/build.make
 tests/tensor_test: libtensor_lib.a
 tests/tensor_test: lib/libgtest_main.a
+tests/tensor_test: /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so
+tests/tensor_test: /usr/lib/x86_64-linux-gnu/libpthread.a
 tests/tensor_test: lib/libgtest.a
 tests/tensor_test: tests/CMakeFiles/tensor_test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable tensor_test"

@@ -172,6 +172,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named benchmark_gemm
+
+# Build rule for target.
+benchmark_gemm: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmark_gemm
+.PHONY : benchmark_gemm
+
+# fast build rule for target.
+benchmark_gemm/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/build
+.PHONY : benchmark_gemm/fast
+
+#=============================================================================
 # Target rules for targets named tensor_lib
 
 # Build rule for target.
@@ -262,29 +275,53 @@ gtest_main/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
-src/tensor.o: src/tensor.cpp.o
-.PHONY : src/tensor.o
+benchmarks/benchmark_gemm.o: benchmarks/benchmark_gemm.cpp.o
+.PHONY : benchmarks/benchmark_gemm.o
 
 # target to build an object file
-src/tensor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/tensor.cpp.o
-.PHONY : src/tensor.cpp.o
+benchmarks/benchmark_gemm.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.o
+.PHONY : benchmarks/benchmark_gemm.cpp.o
 
-src/tensor.i: src/tensor.cpp.i
-.PHONY : src/tensor.i
+benchmarks/benchmark_gemm.i: benchmarks/benchmark_gemm.cpp.i
+.PHONY : benchmarks/benchmark_gemm.i
 
 # target to preprocess a source file
-src/tensor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/tensor.cpp.i
-.PHONY : src/tensor.cpp.i
+benchmarks/benchmark_gemm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.i
+.PHONY : benchmarks/benchmark_gemm.cpp.i
 
-src/tensor.s: src/tensor.cpp.s
-.PHONY : src/tensor.s
+benchmarks/benchmark_gemm.s: benchmarks/benchmark_gemm.cpp.s
+.PHONY : benchmarks/benchmark_gemm.s
 
 # target to generate assembly for a file
-src/tensor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/tensor.cpp.s
-.PHONY : src/tensor.cpp.s
+benchmarks/benchmark_gemm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.s
+.PHONY : benchmarks/benchmark_gemm.cpp.s
+
+src/tensor/tensor.o: src/tensor/tensor.cpp.o
+.PHONY : src/tensor/tensor.o
+
+# target to build an object file
+src/tensor/tensor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o
+.PHONY : src/tensor/tensor.cpp.o
+
+src/tensor/tensor.i: src/tensor/tensor.cpp.i
+.PHONY : src/tensor/tensor.i
+
+# target to preprocess a source file
+src/tensor/tensor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.i
+.PHONY : src/tensor/tensor.cpp.i
+
+src/tensor/tensor.s: src/tensor/tensor.cpp.s
+.PHONY : src/tensor/tensor.s
+
+# target to generate assembly for a file
+src/tensor/tensor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.s
+.PHONY : src/tensor/tensor.cpp.s
 
 src/turbo.o: src/turbo.cpp.o
 .PHONY : src/turbo.o
@@ -323,6 +360,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... benchmark_gemm"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
@@ -330,9 +368,12 @@ help:
 	@echo "... tensor_lib"
 	@echo "... tensor_test"
 	@echo "... turbo"
-	@echo "... src/tensor.o"
-	@echo "... src/tensor.i"
-	@echo "... src/tensor.s"
+	@echo "... benchmarks/benchmark_gemm.o"
+	@echo "... benchmarks/benchmark_gemm.i"
+	@echo "... benchmarks/benchmark_gemm.s"
+	@echo "... src/tensor/tensor.o"
+	@echo "... src/tensor/tensor.i"
+	@echo "... src/tensor/tensor.s"
 	@echo "... src/turbo.o"
 	@echo "... src/turbo.i"
 	@echo "... src/turbo.s"

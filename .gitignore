@@ -1,0 +1,29 @@
+# Build directories
+build/
+bin/
+lib/
+*.o
+*.a
+*.so
+*.dylib
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Compiled Binaries
+turbo
+tests/tensor_test
