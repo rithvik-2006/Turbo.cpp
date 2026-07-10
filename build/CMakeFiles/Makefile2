@@ -160,7 +160,7 @@ CMakeFiles/benchmark_gemm.dir/all: CMakeFiles/tensor_lib.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/benchmark_gemm.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/benchmark_gemm.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/benchmark_gemm.dir/rule
@@ -181,12 +181,12 @@ CMakeFiles/benchmark_gemm.dir/clean:
 CMakeFiles/tensor_lib.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=11,12 "Built target tensor_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=11,12,13,14,15,16,17 "Built target tensor_lib"
 .PHONY : CMakeFiles/tensor_lib.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/tensor_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tensor_lib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/tensor_lib.dir/rule
@@ -207,12 +207,12 @@ CMakeFiles/tensor_lib.dir/clean:
 CMakeFiles/turbo.dir/all: CMakeFiles/tensor_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo.dir/build.make CMakeFiles/turbo.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo.dir/build.make CMakeFiles/turbo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=15,16 "Built target turbo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=21,22 "Built target turbo"
 .PHONY : CMakeFiles/turbo.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/turbo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/turbo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/turbo.dir/rule
@@ -235,12 +235,12 @@ tests/CMakeFiles/tensor_test.dir/all: _deps/googletest-build/googletest/CMakeFil
 tests/CMakeFiles/tensor_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=13,14 "Built target tensor_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=18,19,20 "Built target tensor_test"
 .PHONY : tests/CMakeFiles/tensor_test.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/tensor_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/tensor_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/tensor_test.dir/rule

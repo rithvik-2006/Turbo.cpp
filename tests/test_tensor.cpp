@@ -1,89 +1,44 @@
-#include "../include/turbo/tensor/tensor.hpp"
+#include "turbo/nn/softmax.hpp"
+#include <cmath>
 #include <gtest/gtest.h>
-#include <stdexcept>
-#include <vector>
 
-TEST(TensorTest, Initialization) {
-  std::vector<float> data = {1, 2, 3, 4, 5, 6};
-  Tensor t(data, {2, 3});
-  EXPECT_EQ(t.rank(), 2);
-  EXPECT_EQ(t.numel(), 6);
-  EXPECT_TRUE(t.is_contiguous());
+// Helper function to check if two floats are close enough (handles floating
+// point drift)
+bool is_close(float a, float b, float epsilon = 1e-4) {
+  return std::abs(a - b) < epsilon;
 }
 
-TEST(TensorTest, Indexing) {
-  std::vector<float> data = {10, 20, 30, 40, 50, 60};
-  Tensor t(data, {2, 3});
-  EXPECT_EQ(t.at({0, 1}), 20);
-  EXPECT_EQ(t.at({1, 2}), 60);
-  t.at({1, 2}) = 99;
-  EXPECT_EQ(t.at({1, 2}), 99);
-}
+TEST(LayerTest, NumericallyStableSoftmax) {
+  using namespace turbo;
 
-TEST(TensorTest, BroadcastingAddition) {
-  Tensor matrix({1, 2, 3, 4, 5, 6}, {2, 3});
-  Tensor bias({10, 20, 30}, {3});
-  Tensor result = matrix + bias;
-  EXPECT_EQ(result.at({0, 0}), 11);
-  EXPECT_EQ(result.at({1, 2}), 36);
-}
+  // 1. Setup a dummy input (Batch Size 2, Vocab Size 3)
+  // We intentionally include a large number (100.0) to test numerical
+  // stability. Naive softmax would return NaN here.
+  std::vector<float> input_data = {1.0f, 2.0f, 3.0f, 10.0f, 100.0f, 10.0f};
+  std::vector<size_t> shape = {2, 3};
+  std::vector<size_t> strides = {3, 1}; // Standard row-major contiguous strides
 
-TEST(TensorTest, ViewManipulations) {
-  std::vector<float> data = {1, 2, 3, 4, 5, 6};
-  Tensor t(data, {2, 3});
+  // Create the tensor
+  Tensor logits(input_data, shape);
 
-  Tensor flat = t.flatten();
-  EXPECT_EQ(flat.rank(), 1);
-  EXPECT_EQ(flat.get_shape()[0], 6);
+  // 2. Initialize the Layer and run the forward pass
+  nn::Softmax softmax_layer(-1);
+  Tensor probabilities = softmax_layer.forward(logits);
 
-  Tensor reshaped = t.reshape({3, 2});
-  EXPECT_EQ(reshaped.rank(), 2);
+  // 3. Define the Expected Output (Pre-calculated via PyTorch)
+  // PyTorch code: torch.softmax(torch.tensor([[1., 2., 3.], [10., 100., 10.]]),
+  // dim=-1)
+  std::vector<float> expected = {
+      0.0900f, 0.2447f, 0.6652f, // Row 0
+      0.0000f, 1.0000f, 0.0000f  // Row 1 (100 dominates completely)
+  };
 
-  Tensor unsqueezed = t.unsqueeze(1);
-  EXPECT_EQ(unsqueezed.rank(), 3);
-
-  Tensor squeezed = unsqueezed.squeeze(1);
-  EXPECT_EQ(squeezed.rank(), 2);
-
-  Tensor transposed = t.transpose();
-  EXPECT_FALSE(transposed.is_contiguous());
-  EXPECT_THROW(transposed.flatten(), std::runtime_error);
-}
-
-TEST(TensorTest, MatMul) {
-  // Test basic 2x3 * 3x2 multiplication
-  Tensor A({1, 2, 3, 4, 5, 6}, {2, 3});
-  Tensor B({7, 8, 9, 10, 11, 12}, {3, 2});
-  Tensor C = A.matmul(B);
-
-  EXPECT_EQ(C.rank(), 2);
-  EXPECT_EQ(C.get_shape()[0], 2);
-  EXPECT_EQ(C.get_shape()[1], 2);
-
-  // Expected result matrix:
-  // [58, 64]
-  // [139, 154]
-  EXPECT_NEAR(C.at({0, 0}), 58.0f, 1e-5);
-  EXPECT_NEAR(C.at({0, 1}), 64.0f, 1e-5);
-  EXPECT_NEAR(C.at({1, 0}), 139.0f, 1e-5);
-  EXPECT_NEAR(C.at({1, 1}), 154.0f, 1e-5);
-
-  // Test with non-multiple of 8 dimensions (e.g. 3x3 * 3x3)
-  Tensor A2({1, 2, 3, 4, 5, 6, 7, 8, 9}, {3, 3});
-  Tensor B2({9, 8, 7, 6, 5, 4, 3, 2, 1}, {3, 3});
-  Tensor C2 = A2.matmul(B2);
-
-  // Expected result:
-  // [1*9 + 2*6 + 3*3 = 30, 1*8 + 2*5 + 3*2 = 24, 1*7 + 2*4 + 3*1 = 18]
-  // [4*9 + 5*6 + 6*3 = 84, 4*8 + 5*5 + 6*2 = 69, 4*7 + 5*4 + 6*1 = 54]
-  // [7*9 + 8*6 + 9*3 = 138, 7*8 + 8*5 + 9*2 = 114, 7*7 + 8*4 + 9*1 = 90]
-  EXPECT_NEAR(C2.at({0, 0}), 30.0f, 1e-5);
-  EXPECT_NEAR(C2.at({0, 1}), 24.0f, 1e-5);
-  EXPECT_NEAR(C2.at({0, 2}), 18.0f, 1e-5);
-  EXPECT_NEAR(C2.at({1, 0}), 84.0f, 1e-5);
-  EXPECT_NEAR(C2.at({1, 1}), 69.0f, 1e-5);
-  EXPECT_NEAR(C2.at({1, 2}), 54.0f, 1e-5);
-  EXPECT_NEAR(C2.at({2, 0}), 138.0f, 1e-5);
-  EXPECT_NEAR(C2.at({2, 1}), 114.0f, 1e-5);
-  EXPECT_NEAR(C2.at({2, 2}), 90.0f, 1e-5);
+  // 4. Validate
+  for (size_t i = 0; i < expected.size(); ++i) {
+    // Calculate flat index since the returned tensor is contiguous
+    float actual_val = probabilities.at({i / 3, i % 3});
+    EXPECT_TRUE(is_close(actual_val, expected[i]))
+        << "Mismatch at index " << i << ": Expected " << expected[i] << ", got "
+        << actual_val;
+  }
 }

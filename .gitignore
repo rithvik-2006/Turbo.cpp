@@ -25,5 +25,5 @@ CTestTestfile.cmake
 _deps/
 
 # Compiled Binaries
-turbo
-tests/tensor_test
+./turbo
+./tests/tensor_test

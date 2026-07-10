@@ -14,7 +14,7 @@ target_compile_options(benchmark_gemm PRIVATE -O3 -mavx2 -mfma)
 
 include_directories(include)
 
-add_library(tensor_lib src/tensor/tensor.cpp)
+add_library(tensor_lib src/tensor/tensor.cpp src/nn/softmax.cpp src/nn/linear.cpp src/nn/swiglu.cpp src/nn/embedding.cpp src/nn/rmsnorm.cpp)
 target_include_directories(tensor_lib PUBLIC include)
 
 find_package(OpenMP REQUIRED)

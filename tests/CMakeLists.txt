@@ -8,7 +8,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(tensor_test test_tensor.cpp)
+add_executable(tensor_test test_tensor.cpp test_nn.cpp)
 target_link_libraries(tensor_test PRIVATE tensor_lib gtest_main)
 
 include(GoogleTest)

@@ -299,6 +299,126 @@ benchmarks/benchmark_gemm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.s
 .PHONY : benchmarks/benchmark_gemm.cpp.s
 
+src/nn/embedding.o: src/nn/embedding.cpp.o
+.PHONY : src/nn/embedding.o
+
+# target to build an object file
+src/nn/embedding.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/embedding.cpp.o
+.PHONY : src/nn/embedding.cpp.o
+
+src/nn/embedding.i: src/nn/embedding.cpp.i
+.PHONY : src/nn/embedding.i
+
+# target to preprocess a source file
+src/nn/embedding.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/embedding.cpp.i
+.PHONY : src/nn/embedding.cpp.i
+
+src/nn/embedding.s: src/nn/embedding.cpp.s
+.PHONY : src/nn/embedding.s
+
+# target to generate assembly for a file
+src/nn/embedding.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/embedding.cpp.s
+.PHONY : src/nn/embedding.cpp.s
+
+src/nn/linear.o: src/nn/linear.cpp.o
+.PHONY : src/nn/linear.o
+
+# target to build an object file
+src/nn/linear.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/linear.cpp.o
+.PHONY : src/nn/linear.cpp.o
+
+src/nn/linear.i: src/nn/linear.cpp.i
+.PHONY : src/nn/linear.i
+
+# target to preprocess a source file
+src/nn/linear.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/linear.cpp.i
+.PHONY : src/nn/linear.cpp.i
+
+src/nn/linear.s: src/nn/linear.cpp.s
+.PHONY : src/nn/linear.s
+
+# target to generate assembly for a file
+src/nn/linear.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/linear.cpp.s
+.PHONY : src/nn/linear.cpp.s
+
+src/nn/rmsnorm.o: src/nn/rmsnorm.cpp.o
+.PHONY : src/nn/rmsnorm.o
+
+# target to build an object file
+src/nn/rmsnorm.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.o
+.PHONY : src/nn/rmsnorm.cpp.o
+
+src/nn/rmsnorm.i: src/nn/rmsnorm.cpp.i
+.PHONY : src/nn/rmsnorm.i
+
+# target to preprocess a source file
+src/nn/rmsnorm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.i
+.PHONY : src/nn/rmsnorm.cpp.i
+
+src/nn/rmsnorm.s: src/nn/rmsnorm.cpp.s
+.PHONY : src/nn/rmsnorm.s
+
+# target to generate assembly for a file
+src/nn/rmsnorm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.s
+.PHONY : src/nn/rmsnorm.cpp.s
+
+src/nn/softmax.o: src/nn/softmax.cpp.o
+.PHONY : src/nn/softmax.o
+
+# target to build an object file
+src/nn/softmax.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/softmax.cpp.o
+.PHONY : src/nn/softmax.cpp.o
+
+src/nn/softmax.i: src/nn/softmax.cpp.i
+.PHONY : src/nn/softmax.i
+
+# target to preprocess a source file
+src/nn/softmax.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/softmax.cpp.i
+.PHONY : src/nn/softmax.cpp.i
+
+src/nn/softmax.s: src/nn/softmax.cpp.s
+.PHONY : src/nn/softmax.s
+
+# target to generate assembly for a file
+src/nn/softmax.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/softmax.cpp.s
+.PHONY : src/nn/softmax.cpp.s
+
+src/nn/swiglu.o: src/nn/swiglu.cpp.o
+.PHONY : src/nn/swiglu.o
+
+# target to build an object file
+src/nn/swiglu.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/swiglu.cpp.o
+.PHONY : src/nn/swiglu.cpp.o
+
+src/nn/swiglu.i: src/nn/swiglu.cpp.i
+.PHONY : src/nn/swiglu.i
+
+# target to preprocess a source file
+src/nn/swiglu.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/swiglu.cpp.i
+.PHONY : src/nn/swiglu.cpp.i
+
+src/nn/swiglu.s: src/nn/swiglu.cpp.s
+.PHONY : src/nn/swiglu.s
+
+# target to generate assembly for a file
+src/nn/swiglu.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/swiglu.cpp.s
+.PHONY : src/nn/swiglu.cpp.s
+
 src/tensor/tensor.o: src/tensor/tensor.cpp.o
 .PHONY : src/tensor/tensor.o
 
@@ -371,6 +491,21 @@ help:
 	@echo "... benchmarks/benchmark_gemm.o"
 	@echo "... benchmarks/benchmark_gemm.i"
 	@echo "... benchmarks/benchmark_gemm.s"
+	@echo "... src/nn/embedding.o"
+	@echo "... src/nn/embedding.i"
+	@echo "... src/nn/embedding.s"
+	@echo "... src/nn/linear.o"
+	@echo "... src/nn/linear.i"
+	@echo "... src/nn/linear.s"
+	@echo "... src/nn/rmsnorm.o"
+	@echo "... src/nn/rmsnorm.i"
+	@echo "... src/nn/rmsnorm.s"
+	@echo "... src/nn/softmax.o"
+	@echo "... src/nn/softmax.i"
+	@echo "... src/nn/softmax.s"
+	@echo "... src/nn/swiglu.o"
+	@echo "... src/nn/swiglu.i"
+	@echo "... src/nn/swiglu.s"
 	@echo "... src/tensor/tensor.o"
 	@echo "... src/tensor/tensor.i"
 	@echo "... src/tensor/tensor.s"

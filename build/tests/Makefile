@@ -185,6 +185,30 @@ tensor_test/fast:
 	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/build
 .PHONY : tensor_test/fast
 
+test_nn.o: test_nn.cpp.o
+.PHONY : test_nn.o
+
+# target to build an object file
+test_nn.cpp.o:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o
+.PHONY : test_nn.cpp.o
+
+test_nn.i: test_nn.cpp.i
+.PHONY : test_nn.i
+
+# target to preprocess a source file
+test_nn.cpp.i:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_nn.cpp.i
+.PHONY : test_nn.cpp.i
+
+test_nn.s: test_nn.cpp.s
+.PHONY : test_nn.s
+
+# target to generate assembly for a file
+test_nn.cpp.s:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_nn.cpp.s
+.PHONY : test_nn.cpp.s
+
 test_tensor.o: test_tensor.cpp.o
 .PHONY : test_tensor.o
 
@@ -223,6 +247,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... tensor_test"
+	@echo "... test_nn.o"
+	@echo "... test_nn.i"
+	@echo "... test_nn.s"
 	@echo "... test_tensor.o"
 	@echo "... test_tensor.i"
 	@echo "... test_tensor.s"
