@@ -45,28 +45,52 @@ void RoPE::apply_in_place(Tensor &x, size_t position_offset) {
   size_t seq_len = shape[shape.size() - 2];
   size_t half_dim = head_dim / 2;
 
-  for (size_t pos = 0; pos < seq_len; ++pos) {
-    size_t absolute_pos = position_offset + pos;
+  if (shape.size() == 4) {
+    size_t batch = shape[0];
+    size_t num_heads = shape[1];
+    for (size_t b = 0; b < batch; ++b) {
+      for (size_t h = 0; h < num_heads; ++h) {
+        for (size_t pos = 0; pos < seq_len; ++pos) {
+          size_t absolute_pos = position_offset + pos;
+          if (absolute_pos >= max_seq_len) {
+            throw std::out_of_range("Sequence position exceeds RoPE cache size.");
+          }
 
-    if (absolute_pos >= max_seq_len) {
-      throw std::out_of_range("Sequence position exceeds RoPE cache size.");
+          for (size_t i = 0; i < half_dim; ++i) {
+            size_t cache_idx = absolute_pos * half_dim + i;
+            float cos_val = cos_cache[cache_idx];
+            float sin_val = sin_cache[cache_idx];
+
+            float x0 = x.at({b, h, pos, i});
+            float x1 = x.at({b, h, pos, i + half_dim});
+
+            x.at({b, h, pos, i}) = x0 * cos_val - x1 * sin_val;
+            x.at({b, h, pos, i + half_dim}) = x0 * sin_val + x1 * cos_val;
+          }
+        }
+      }
     }
+  } else if (shape.size() == 2) {
+    for (size_t pos = 0; pos < seq_len; ++pos) {
+      size_t absolute_pos = position_offset + pos;
+      if (absolute_pos >= max_seq_len) {
+        throw std::out_of_range("Sequence position exceeds RoPE cache size.");
+      }
 
-    for (size_t i = 0; i < half_dim; ++i) {
-      size_t cache_idx = absolute_pos * half_dim + i;
-      float cos_val = cos_cache[cache_idx];
-      float sin_val = sin_cache[cache_idx];
+      for (size_t i = 0; i < half_dim; ++i) {
+        size_t cache_idx = absolute_pos * half_dim + i;
+        float cos_val = cos_cache[cache_idx];
+        float sin_val = sin_cache[cache_idx];
 
-      // Target the adjacent pairs: x[i] and x[i + half_dim]
-      // Note: Some models interleave (0,1), (2,3). LLaMA splits the vector in
-      // half.
-      float x0 = x.at({pos, i});
-      float x1 = x.at({pos, i + half_dim});
+        float x0 = x.at({pos, i});
+        float x1 = x.at({pos, i + half_dim});
 
-      // Apply the 2D rotation matrix
-      x.at({pos, i}) = x0 * cos_val - x1 * sin_val;
-      x.at({pos, i + half_dim}) = x0 * sin_val + x1 * cos_val;
+        x.at({pos, i}) = x0 * cos_val - x1 * sin_val;
+        x.at({pos, i + half_dim}) = x0 * sin_val + x1 * cos_val;
+      }
     }
+  } else {
+    throw std::invalid_argument("RoPE apply_in_place currently supports 2D or 4D tensors.");
   }
 }
 

@@ -67,6 +67,17 @@ Tensor::Tensor(shared_ptr<Storage> st, size_t off, vector<size_t> s,
     : storage(std::move(st)), offset(off), shape(std::move(s)),
       strides(std::move(str)) {}
 
+Tensor::Tensor(const std::vector<size_t>& s, turbo::ggml_type dtype, void* external_ptr)
+    : shape(s), offset(0) {
+    strides = compute_strides(shape);
+    
+    // For now we assume Float32 internally if we are just testing pointer mapping,
+    // though dtype would dictate actual size in a full impl
+    size_t total_bytes = calculate_size_bytes(shape, dtype);
+    
+    storage = std::make_shared<Storage>(external_ptr, total_bytes);
+}
+
 // --- Metadata Queries ---
 
 size_t Tensor::numel() const {
@@ -86,6 +97,21 @@ bool Tensor::is_contiguous() const {
     expected_stride *= shape[i];
   }
   return true;
+}
+
+Tensor Tensor::contiguous() const {
+  if (is_contiguous()) return *this;
+  
+  std::vector<float> new_data(numel(), 0.0f);
+  Tensor result(new_data, shape);
+  
+  float *dst = result.data_ptr();
+  size_t count = numel();
+  for (size_t i = 0; i < count; ++i) {
+    std::vector<size_t> idx = unravel_index(i, shape);
+    dst[i] = this->at(idx);
+  }
+  return result;
 }
 
 // --- View Manipulators ---
@@ -246,85 +272,100 @@ static void pack_block_B(const float *B, float *packed_B, size_t k0, size_t j0,
 }
 
 Tensor Tensor::matmul(const Tensor &other) const {
-  if (this->get_shape().size() != 2 || other.get_shape().size() != 2) {
-    throw invalid_argument("matmul only supports 2D tensors");
+  if (this->get_shape().size() < 2 || other.get_shape().size() < 2) {
+    throw invalid_argument("matmul requires at least 2D tensors");
   }
 
-  size_t M = this->get_shape()[0];
-  size_t K = this->get_shape()[1];
-  size_t N = other.get_shape()[1];
+  size_t rank = this->get_shape().size();
+  if (rank != other.get_shape().size()) {
+    throw invalid_argument("matmul requires both tensors to have the same rank");
+  }
 
-  if (K != other.get_shape()[0]) {
+  size_t batch_size = 1;
+  vector<size_t> result_shape;
+  for (size_t i = 0; i < rank - 2; ++i) {
+    if (this->get_shape()[i] != other.get_shape()[i]) {
+      throw invalid_argument("Batch dimensions must match");
+    }
+    batch_size *= this->get_shape()[i];
+    result_shape.push_back(this->get_shape()[i]);
+  }
+
+  size_t M = this->get_shape()[rank - 2];
+  size_t K = this->get_shape()[rank - 1];
+  size_t N = other.get_shape()[rank - 1];
+
+  if (K != other.get_shape()[rank - 2]) {
     throw invalid_argument("Inner dimensions must match");
   }
 
-  vector<float> zeros(M * N, 0.0f);
-  Tensor result(zeros, {M, N});
+  result_shape.push_back(M);
+  result_shape.push_back(N);
 
-  const float *A_ptr = this->storage->data.data();
-  const float *B_ptr = other.storage->data.data();
-  float *C_ptr = result.storage->data.data();
-  size_t stride_A = this->strides[0];
-  size_t stride_B = other.strides[0];
-  size_t stride_C = result.strides[0];
+  vector<float> zeros(batch_size * M * N, 0.0f);
+  Tensor result(zeros, result_shape);
+
+  size_t stride_A = this->strides[rank - 2];
+  size_t stride_B = other.strides[rank - 2];
+  size_t stride_C = result.strides[rank - 2];
 
   const size_t T = 64;
 
-#pragma omp parallel for
-  for (size_t i0 = 0; i0 < M; i0 += T) {
-    // Stack-allocate contiguous packing buffers (L1 Cache sized)
-    // 64x64 floats = 16 KB per buffer, aligned to 32 bytes for AVX2 registers.
-    // Allocated inside the parallel loop so each thread has its own private
-    // buffers!
-    alignas(32) float packed_A[T * T];
-    alignas(32) float packed_B[T * T];
+#pragma omp parallel for collapse(2)
+  for (size_t b = 0; b < batch_size; ++b) {
+    for (size_t i0 = 0; i0 < M; i0 += T) {
+      // Calculate batch offset
+      size_t a_offset = this->offset;
+      size_t b_offset = other.offset;
+      size_t c_offset = result.offset;
 
-    size_t i_end = std::min(i0 + T, M);
-    size_t block_M = i_end - i0;
+      size_t temp_b = b;
+      for (int d = rank - 3; d >= 0; --d) {
+        size_t idx = temp_b % this->get_shape()[d];
+        temp_b /= this->get_shape()[d];
+        a_offset += idx * this->strides[d];
+        b_offset += idx * other.strides[d];
+        c_offset += idx * result.strides[d];
+      }
 
-    for (size_t k0 = 0; k0 < K; k0 += T) {
-      size_t k_end = std::min(k0 + T, K);
-      size_t block_K = k_end - k0;
+      const float *A_ptr = reinterpret_cast<float*>(this->storage->data()) + a_offset;
+      const float *B_ptr = reinterpret_cast<float*>(other.storage->data()) + b_offset;
+      float *C_ptr = reinterpret_cast<float*>(result.storage->data()) + c_offset;
 
-      // Pack the A block once for this row panel
-      pack_block_A(A_ptr, packed_A, i0, k0, i_end, k_end, stride_A);
+      alignas(32) float packed_A[T * T];
+      alignas(32) float packed_B[T * T];
 
-      for (size_t j0 = 0; j0 < N; j0 += T) {
-        size_t j_end = std::min(j0 + T, N);
-        size_t block_N = j_end - j0;
+      size_t i_end = std::min(i0 + T, M);
+      size_t block_M = i_end - i0;
 
-        // Pack the B block once for this column panel
-        pack_block_B(B_ptr, packed_B, k0, j0, k_end, j_end, stride_B);
+      for (size_t k0 = 0; k0 < K; k0 += T) {
+        size_t k_end = std::min(k0 + T, K);
+        size_t block_K = k_end - k0;
 
-        // --- INNER LOOP: AVX2 Math strictly on Packed Buffers ---
-        for (size_t i = 0; i < block_M; i++) {
-          for (size_t k = 0; k < block_K; k++) {
+        pack_block_A(A_ptr, packed_A, i0, k0, i_end, k_end, stride_A);
 
-            // Read from contiguous packed A
-            float a_val = packed_A[i * block_K + k];
-            __m256 a_vec = _mm256_set1_ps(a_val);
+        for (size_t j0 = 0; j0 < N; j0 += T) {
+          size_t j_end = std::min(j0 + T, N);
+          size_t block_N = j_end - j0;
 
-            size_t j = 0;
+          pack_block_B(B_ptr, packed_B, k0, j0, k_end, j_end, stride_B);
 
-            // Process 8 floats at a time using FMA
-            for (; j + 7 < block_N; j += 8) {
-              // Read from contiguous packed B
-              __m256 b_vec = _mm256_loadu_ps(&packed_B[k * block_N + j]);
+          for (size_t i = 0; i < block_M; i++) {
+            for (size_t k = 0; k < block_K; k++) {
+              float a_val = packed_A[i * block_K + k];
+              __m256 a_vec = _mm256_set1_ps(a_val);
+              size_t j = 0;
 
-              // Load C directly from memory (C is not packed to avoid
-              // write-back overhead)
-              __m256 c_vec =
-                  _mm256_loadu_ps(&C_ptr[(i0 + i) * stride_C + (j0 + j)]);
+              for (; j + 7 < block_N; j += 8) {
+                __m256 b_vec = _mm256_loadu_ps(&packed_B[k * block_N + j]);
+                __m256 c_vec = _mm256_loadu_ps(&C_ptr[(i0 + i) * stride_C + (j0 + j)]);
+                c_vec = _mm256_fmadd_ps(a_vec, b_vec, c_vec);
+                _mm256_storeu_ps(&C_ptr[(i0 + i) * stride_C + (j0 + j)], c_vec);
+              }
 
-              c_vec = _mm256_fmadd_ps(a_vec, b_vec, c_vec);
-
-              _mm256_storeu_ps(&C_ptr[(i0 + i) * stride_C + (j0 + j)], c_vec);
-            }
-
-            // Tail loop for leftovers
-            for (; j < block_N; j++) {
-              C_ptr[(i0 + i) * stride_C + (j0 + j)] +=
-                  a_val * packed_B[k * block_N + j];
+              for (; j < block_N; j++) {
+                C_ptr[(i0 + i) * stride_C + (j0 + j)] += a_val * packed_B[k * block_N + j];
+              }
             }
           }
         }
@@ -336,6 +377,14 @@ Tensor Tensor::matmul(const Tensor &other) const {
 }
 // --- Indexing ---
 
+float *Tensor::data_ptr() {
+  return reinterpret_cast<float*>(storage->data()) + offset;
+}
+
+const float *Tensor::data_ptr() const {
+  return reinterpret_cast<float*>(storage->data()) + offset;
+}
+
 float &Tensor::at(const vector<size_t> &indices) {
   if (indices.size() != shape.size())
     throw std::invalid_argument("Rank mismatch.");
@@ -345,7 +394,7 @@ float &Tensor::at(const vector<size_t> &indices) {
       throw std::out_of_range("Index out of bounds.");
     flat_index += indices[i] * strides[i];
   }
-  return storage->data[flat_index];
+  return reinterpret_cast<float*>(storage->data())[flat_index];
 }
 
 const float &Tensor::at(const vector<size_t> &indices) const {
@@ -357,7 +406,7 @@ const float &Tensor::at(const vector<size_t> &indices) const {
       throw std::out_of_range("Index out of bounds.");
     flat_index += indices[i] * strides[i];
   }
-  return storage->data[flat_index];
+  return reinterpret_cast<float*>(storage->data())[flat_index];
 }
 
 // --- Multithreading ---
@@ -431,7 +480,7 @@ void Tensor::print() const {
   for (size_t i = 0; i < shape[0]; i++) {
     for (size_t j = 0; j < shape[1]; j++) {
       size_t index = offset + (i * strides[0]) + (j * strides[1]);
-      cout << storage->data[index] << " ";
+      cout << reinterpret_cast<float*>(storage->data())[index] << " ";
     }
     cout << "\n";
   }

@@ -32,11 +32,11 @@ Tensor MultiHeadAttention::forward(const Tensor &input,
   // Conceptually changing: [batch, seq_len, embed_dim]
   // To: [batch, num_heads, seq_len, head_dim]
   // (Using your zero-copy view manipulators here)
-  Q = Q.reshape({/* batch */ 1, /* seq_len */ input.get_shape()[1], num_heads,
+  Q = Q.reshape({/* batch */ 1, /* seq_len */ input.get_shape()[0], num_heads,
                  head_dim})
           .transpose(1, 2);
-  K = K.reshape({1, input.get_shape()[1], num_heads, head_dim}).transpose(1, 2);
-  V = V.reshape({1, input.get_shape()[1], num_heads, head_dim}).transpose(1, 2);
+  K = K.reshape({1, input.get_shape()[0], num_heads, head_dim}).transpose(1, 2);
+  V = V.reshape({1, input.get_shape()[0], num_heads, head_dim}).transpose(1, 2);
 
   // 3. Apply RoPE in-place to Q and K
   rope.apply_in_place(Q, position_offset);
@@ -67,9 +67,9 @@ Tensor MultiHeadAttention::forward(const Tensor &input,
 
   // 8. Reassemble Heads and Output Projection
   // Transpose back: [batch, seq_len, num_heads, head_dim]
-  // Reshape to: [batch, seq_len, embed_dim]
+  // Reshape to: [seq_len, embed_dim] (2D tensor)
   context =
-      context.transpose(1, 2).reshape({1, input.get_shape()[1], embed_dim});
+      context.transpose(1, 2).contiguous().reshape({input.get_shape()[0], embed_dim});
 
   return o_proj.forward(context);
 }

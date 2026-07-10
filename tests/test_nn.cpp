@@ -97,28 +97,28 @@ TEST(LayerTest, EmbeddingForwardPass) {
     Tensor single_token(single_token_data, {1}); // Asking for Token ID 2
     Tensor y_single = emb_layer.forward(single_token);
     
-    EXPECT_EQ(y_single.rank(), 1);
-    EXPECT_EQ(y_single.get_shape()[0], 4);
-    EXPECT_FLOAT_EQ(y_single.at({0}), 8.0f); // Starts at 8
-    EXPECT_FLOAT_EQ(y_single.at({3}), 11.0f); // Ends at 11
+    EXPECT_EQ(y_single.rank(), 2);
+    EXPECT_EQ(y_single.get_shape()[0], 1);
+    EXPECT_EQ(y_single.get_shape()[1], 4);
+    EXPECT_FLOAT_EQ(y_single.at({0, 0}), 8.0f); // Starts at 8
+    EXPECT_FLOAT_EQ(y_single.at({0, 3}), 11.0f); // Ends at 11
     
     // 4. Test Prefill Phase (Batched Tokens) -> Should allocate 3D tensor
     std::vector<float> batched_tokens_data = {2.0f, 0.0f};
     Tensor batched_tokens(batched_tokens_data, {2}); // Asking for Token IDs 2 and 0
     Tensor y_batch = emb_layer.forward(batched_tokens);
     
-    EXPECT_EQ(y_batch.rank(), 3);
-    EXPECT_EQ(y_batch.get_shape()[0], 1); // Batch size 1
-    EXPECT_EQ(y_batch.get_shape()[1], 2); // Seq len 2
-    EXPECT_EQ(y_batch.get_shape()[2], 4); // Embed dim 4
+    EXPECT_EQ(y_batch.rank(), 2);
+    EXPECT_EQ(y_batch.get_shape()[0], 2); // Seq len 2
+    EXPECT_EQ(y_batch.get_shape()[1], 4); // Embed dim 4
     
     // Check first token in batch (Token ID 2)
-    EXPECT_FLOAT_EQ(y_batch.at({0, 0, 0}), 8.0f);
-    EXPECT_FLOAT_EQ(y_batch.at({0, 0, 3}), 11.0f);
+    EXPECT_FLOAT_EQ(y_batch.at({0, 0}), 8.0f);
+    EXPECT_FLOAT_EQ(y_batch.at({0, 3}), 11.0f);
     
     // Check second token in batch (Token ID 0)
-    EXPECT_FLOAT_EQ(y_batch.at({0, 1, 0}), 0.0f);
-    EXPECT_FLOAT_EQ(y_batch.at({0, 1, 3}), 3.0f);
+    EXPECT_FLOAT_EQ(y_batch.at({1, 0}), 0.0f);
+    EXPECT_FLOAT_EQ(y_batch.at({1, 3}), 3.0f);
 }
 
 TEST(LayerTest, EmbeddingOutOfBounds) {

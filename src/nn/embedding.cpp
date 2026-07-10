@@ -28,8 +28,8 @@ Tensor Embedding::forward(const Tensor &input_ids) {
       throw std::out_of_range("Token ID exceeds vocabulary size.");
     }
 
-    // Return a zero-copy 1D slice of the weight matrix
-    return weight.slice(0, token_id);
+    // Return a zero-copy 1D slice reshaped to 2D
+    return weight.slice(0, token_id).reshape({1, embedding_dim});
   }
 
   // For Prefill Phase (Batched tokens)
@@ -37,7 +37,7 @@ Tensor Embedding::forward(const Tensor &input_ids) {
   // contiguity
   size_t seq_len = input_ids.get_shape()[0];
   std::vector<float> zeros(seq_len * embedding_dim, 0.0f);
-  Tensor output(zeros, {1, seq_len, embedding_dim});
+  Tensor output(zeros, {seq_len, embedding_dim});
 
   for (size_t i = 0; i < seq_len; ++i) {
     size_t token_id = static_cast<size_t>(input_ids.at({i}));
@@ -48,7 +48,7 @@ Tensor Embedding::forward(const Tensor &input_ids) {
 
     // Extract the correct row from the weights
     for (size_t j = 0; j < embedding_dim; ++j) {
-      output.at({0, i, j}) = weight.at({token_id, j});
+      output.at({i, j}) = weight.at({token_id, j});
     }
   }
 

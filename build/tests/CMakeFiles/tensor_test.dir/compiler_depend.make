@@ -23,6 +23,7 @@ tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o: /home/manne-rithvik/CodingStuff/
   _deps/googletest-src/googletest/include/gtest/internal/gtest-port.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-string.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-type-util.h \
+  /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/loader/gguf_common.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/tensor/tensor.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/nn/embedding.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/nn/layer.hpp \
@@ -154,6 +155,7 @@ tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o: /home/manne-rithvik/CodingStuff/
   /usr/include/c++/13/cstdint \
   /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
+  /usr/include/c++/13/cstring \
   /usr/include/c++/13/ctime \
   /usr/include/c++/13/cwchar \
   /usr/include/c++/13/cwctype \
@@ -424,6 +426,7 @@ tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o: /home/manne-rithvik/CodingStuf
   _deps/googletest-src/googletest/include/gtest/internal/gtest-port.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-string.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-type-util.h \
+  /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/loader/gguf_common.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/tensor/tensor.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/nn/rope.hpp \
   /usr/include/alloca.h \
@@ -546,6 +549,7 @@ tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o: /home/manne-rithvik/CodingStuf
   /usr/include/c++/13/cstdint \
   /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
+  /usr/include/c++/13/cstring \
   /usr/include/c++/13/ctime \
   /usr/include/c++/13/cwchar \
   /usr/include/c++/13/cwctype \
@@ -784,6 +788,7 @@ tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o: /home/manne-rithvik/CodingSt
   _deps/googletest-src/googletest/include/gtest/internal/gtest-port.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-string.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-type-util.h \
+  /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/loader/gguf_common.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/tensor/tensor.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/nn/layer.hpp \
   /home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/nn/softmax.hpp \
@@ -909,6 +914,7 @@ tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o: /home/manne-rithvik/CodingSt
   /usr/include/c++/13/cstdint \
   /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
+  /usr/include/c++/13/cstring \
   /usr/include/c++/13/ctime \
   /usr/include/c++/13/cwchar \
   /usr/include/c++/13/cwctype \
@@ -1336,6 +1342,10 @@ tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o: /home/manne-rithvik/CodingSt
 
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
+
+/usr/include/x86_64-linux-gnu/bits/environments.h:
+
 /usr/include/c++/13/bits/stl_raw_storage_iter.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigval_t.h:
@@ -1417,6 +1427,8 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-type-util.h:
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/include/c++/13/bits/locale_classes.h:
+
+/home/manne-rithvik/CodingStuff/turbo.cpp/include/turbo/loader/gguf_common.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
@@ -1524,10 +1536,6 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-string.h:
 
 /usr/include/c++/13/bits/invoke.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
-
-/usr/include/x86_64-linux-gnu/bits/environments.h:
-
 /usr/include/regex.h:
 
 _deps/googletest-src/googletest/include/gtest/internal/gtest-port-arch.h:
@@ -1542,17 +1550,23 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-death-test-internal
 
 /usr/include/c++/13/bits/basic_ios.h:
 
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/include/c++/13/bits/algorithmfwd.h:
+
+/usr/include/c++/13/bits/concept_check.h:
+
 _deps/googletest-src/googletest/include/gtest/internal/custom/gtest-printers.h:
 
 /usr/include/c++/13/bits/stl_tempbuf.h:
 
+/usr/include/c++/13/bits/alloc_traits.h:
+
+_deps/googletest-src/googletest/include/gtest/internal/gtest-port.h:
+
 /usr/include/c++/13/bits/random.h:
 
 /usr/include/alloca.h:
-
-/usr/include/c++/13/bits/stl_tree.h:
-
-/usr/include/c++/13/bits/codecvt.h:
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
@@ -1648,12 +1662,6 @@ _deps/googletest-src/googletest/include/gtest/gtest-test-part.h:
 
 /usr/include/stdc-predef.h:
 
-/usr/include/c++/13/bits/concept_check.h:
-
-_deps/googletest-src/googletest/include/gtest/internal/gtest-port.h:
-
-/usr/include/c++/13/bits/alloc_traits.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
 
 /usr/include/asm-generic/bitsperlong.h:
@@ -1696,10 +1704,6 @@ _deps/googletest-src/googletest/include/gtest/gtest-assertion-result.h:
 
 /usr/include/c++/13/backward/binders.h:
 
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/include/c++/13/bits/algorithmfwd.h:
-
 /usr/include/c++/13/bits/predefined_ops.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
@@ -1729,6 +1733,10 @@ _deps/googletest-src/googletest/include/gtest/gtest-assertion-result.h:
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
 /usr/include/c++/13/bits/chrono.h:
+
+/usr/include/c++/13/bits/codecvt.h:
+
+/usr/include/c++/13/bits/stl_tree.h:
 
 /usr/include/c++/13/bits/stl_vector.h:
 
@@ -1783,6 +1791,8 @@ _deps/googletest-src/googletest/include/gtest/gtest-message.h:
 /usr/include/x86_64-linux-gnu/bits/select2.h:
 
 /usr/include/c++/13/cmath:
+
+/usr/include/c++/13/cstring:
 
 /usr/include/c++/13/ctime:
 

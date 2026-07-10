@@ -211,6 +211,32 @@ turbo/fast:
 .PHONY : turbo/fast
 
 #=============================================================================
+# Target rules for targets named run_generation
+
+# Build rule for target.
+run_generation: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_generation
+.PHONY : run_generation
+
+# fast build rule for target.
+run_generation/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_generation.dir/build.make CMakeFiles/run_generation.dir/build
+.PHONY : run_generation/fast
+
+#=============================================================================
+# Target rules for targets named run_loader
+
+# Build rule for target.
+run_loader: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_loader
+.PHONY : run_loader
+
+# fast build rule for target.
+run_loader/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_loader.dir/build.make CMakeFiles/run_loader.dir/build
+.PHONY : run_loader/fast
+
+#=============================================================================
 # Target rules for targets named tensor_test
 
 # Build rule for target.
@@ -299,6 +325,150 @@ benchmarks/benchmark_gemm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.s
 .PHONY : benchmarks/benchmark_gemm.cpp.s
 
+examples/run_generation.o: examples/run_generation.cpp.o
+.PHONY : examples/run_generation.o
+
+# target to build an object file
+examples/run_generation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_generation.dir/build.make CMakeFiles/run_generation.dir/examples/run_generation.cpp.o
+.PHONY : examples/run_generation.cpp.o
+
+examples/run_generation.i: examples/run_generation.cpp.i
+.PHONY : examples/run_generation.i
+
+# target to preprocess a source file
+examples/run_generation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_generation.dir/build.make CMakeFiles/run_generation.dir/examples/run_generation.cpp.i
+.PHONY : examples/run_generation.cpp.i
+
+examples/run_generation.s: examples/run_generation.cpp.s
+.PHONY : examples/run_generation.s
+
+# target to generate assembly for a file
+examples/run_generation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_generation.dir/build.make CMakeFiles/run_generation.dir/examples/run_generation.cpp.s
+.PHONY : examples/run_generation.cpp.s
+
+examples/run_loader.o: examples/run_loader.cpp.o
+.PHONY : examples/run_loader.o
+
+# target to build an object file
+examples/run_loader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_loader.dir/build.make CMakeFiles/run_loader.dir/examples/run_loader.cpp.o
+.PHONY : examples/run_loader.cpp.o
+
+examples/run_loader.i: examples/run_loader.cpp.i
+.PHONY : examples/run_loader.i
+
+# target to preprocess a source file
+examples/run_loader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_loader.dir/build.make CMakeFiles/run_loader.dir/examples/run_loader.cpp.i
+.PHONY : examples/run_loader.cpp.i
+
+examples/run_loader.s: examples/run_loader.cpp.s
+.PHONY : examples/run_loader.s
+
+# target to generate assembly for a file
+examples/run_loader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_loader.dir/build.make CMakeFiles/run_loader.dir/examples/run_loader.cpp.s
+.PHONY : examples/run_loader.cpp.s
+
+src/core/generate.o: src/core/generate.cpp.o
+.PHONY : src/core/generate.o
+
+# target to build an object file
+src/core/generate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/generate.cpp.o
+.PHONY : src/core/generate.cpp.o
+
+src/core/generate.i: src/core/generate.cpp.i
+.PHONY : src/core/generate.i
+
+# target to preprocess a source file
+src/core/generate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/generate.cpp.i
+.PHONY : src/core/generate.cpp.i
+
+src/core/generate.s: src/core/generate.cpp.s
+.PHONY : src/core/generate.s
+
+# target to generate assembly for a file
+src/core/generate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/generate.cpp.s
+.PHONY : src/core/generate.cpp.s
+
+src/core/sampler.o: src/core/sampler.cpp.o
+.PHONY : src/core/sampler.o
+
+# target to build an object file
+src/core/sampler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/sampler.cpp.o
+.PHONY : src/core/sampler.cpp.o
+
+src/core/sampler.i: src/core/sampler.cpp.i
+.PHONY : src/core/sampler.i
+
+# target to preprocess a source file
+src/core/sampler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/sampler.cpp.i
+.PHONY : src/core/sampler.cpp.i
+
+src/core/sampler.s: src/core/sampler.cpp.s
+.PHONY : src/core/sampler.s
+
+# target to generate assembly for a file
+src/core/sampler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/sampler.cpp.s
+.PHONY : src/core/sampler.cpp.s
+
+src/loader/gguf_loader.o: src/loader/gguf_loader.cpp.o
+.PHONY : src/loader/gguf_loader.o
+
+# target to build an object file
+src/loader/gguf_loader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/loader/gguf_loader.cpp.o
+.PHONY : src/loader/gguf_loader.cpp.o
+
+src/loader/gguf_loader.i: src/loader/gguf_loader.cpp.i
+.PHONY : src/loader/gguf_loader.i
+
+# target to preprocess a source file
+src/loader/gguf_loader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/loader/gguf_loader.cpp.i
+.PHONY : src/loader/gguf_loader.cpp.i
+
+src/loader/gguf_loader.s: src/loader/gguf_loader.cpp.s
+.PHONY : src/loader/gguf_loader.s
+
+# target to generate assembly for a file
+src/loader/gguf_loader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/loader/gguf_loader.cpp.s
+.PHONY : src/loader/gguf_loader.cpp.s
+
+src/model/minigpt.o: src/model/minigpt.cpp.o
+.PHONY : src/model/minigpt.o
+
+# target to build an object file
+src/model/minigpt.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/model/minigpt.cpp.o
+.PHONY : src/model/minigpt.cpp.o
+
+src/model/minigpt.i: src/model/minigpt.cpp.i
+.PHONY : src/model/minigpt.i
+
+# target to preprocess a source file
+src/model/minigpt.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/model/minigpt.cpp.i
+.PHONY : src/model/minigpt.cpp.i
+
+src/model/minigpt.s: src/model/minigpt.cpp.s
+.PHONY : src/model/minigpt.s
+
+# target to generate assembly for a file
+src/model/minigpt.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/model/minigpt.cpp.s
+.PHONY : src/model/minigpt.cpp.s
+
 src/nn/attention.o: src/nn/attention.cpp.o
 .PHONY : src/nn/attention.o
 
@@ -346,6 +516,30 @@ src/nn/embedding.s: src/nn/embedding.cpp.s
 src/nn/embedding.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/embedding.cpp.s
 .PHONY : src/nn/embedding.cpp.s
+
+src/nn/ffn.o: src/nn/ffn.cpp.o
+.PHONY : src/nn/ffn.o
+
+# target to build an object file
+src/nn/ffn.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/ffn.cpp.o
+.PHONY : src/nn/ffn.cpp.o
+
+src/nn/ffn.i: src/nn/ffn.cpp.i
+.PHONY : src/nn/ffn.i
+
+# target to preprocess a source file
+src/nn/ffn.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/ffn.cpp.i
+.PHONY : src/nn/ffn.cpp.i
+
+src/nn/ffn.s: src/nn/ffn.cpp.s
+.PHONY : src/nn/ffn.s
+
+# target to generate assembly for a file
+src/nn/ffn.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/ffn.cpp.s
+.PHONY : src/nn/ffn.cpp.s
 
 src/nn/linear.o: src/nn/linear.cpp.o
 .PHONY : src/nn/linear.o
@@ -467,6 +661,30 @@ src/nn/swiglu.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/swiglu.cpp.s
 .PHONY : src/nn/swiglu.cpp.s
 
+src/nn/transforrmer_block.o: src/nn/transforrmer_block.cpp.o
+.PHONY : src/nn/transforrmer_block.o
+
+# target to build an object file
+src/nn/transforrmer_block.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/transforrmer_block.cpp.o
+.PHONY : src/nn/transforrmer_block.cpp.o
+
+src/nn/transforrmer_block.i: src/nn/transforrmer_block.cpp.i
+.PHONY : src/nn/transforrmer_block.i
+
+# target to preprocess a source file
+src/nn/transforrmer_block.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/transforrmer_block.cpp.i
+.PHONY : src/nn/transforrmer_block.cpp.i
+
+src/nn/transforrmer_block.s: src/nn/transforrmer_block.cpp.s
+.PHONY : src/nn/transforrmer_block.s
+
+# target to generate assembly for a file
+src/nn/transforrmer_block.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/transforrmer_block.cpp.s
+.PHONY : src/nn/transforrmer_block.cpp.s
+
 src/tensor/tensor.o: src/tensor/tensor.cpp.o
 .PHONY : src/tensor/tensor.o
 
@@ -533,18 +751,41 @@ help:
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... run_generation"
+	@echo "... run_loader"
 	@echo "... tensor_lib"
 	@echo "... tensor_test"
 	@echo "... turbo"
 	@echo "... benchmarks/benchmark_gemm.o"
 	@echo "... benchmarks/benchmark_gemm.i"
 	@echo "... benchmarks/benchmark_gemm.s"
+	@echo "... examples/run_generation.o"
+	@echo "... examples/run_generation.i"
+	@echo "... examples/run_generation.s"
+	@echo "... examples/run_loader.o"
+	@echo "... examples/run_loader.i"
+	@echo "... examples/run_loader.s"
+	@echo "... src/core/generate.o"
+	@echo "... src/core/generate.i"
+	@echo "... src/core/generate.s"
+	@echo "... src/core/sampler.o"
+	@echo "... src/core/sampler.i"
+	@echo "... src/core/sampler.s"
+	@echo "... src/loader/gguf_loader.o"
+	@echo "... src/loader/gguf_loader.i"
+	@echo "... src/loader/gguf_loader.s"
+	@echo "... src/model/minigpt.o"
+	@echo "... src/model/minigpt.i"
+	@echo "... src/model/minigpt.s"
 	@echo "... src/nn/attention.o"
 	@echo "... src/nn/attention.i"
 	@echo "... src/nn/attention.s"
 	@echo "... src/nn/embedding.o"
 	@echo "... src/nn/embedding.i"
 	@echo "... src/nn/embedding.s"
+	@echo "... src/nn/ffn.o"
+	@echo "... src/nn/ffn.i"
+	@echo "... src/nn/ffn.s"
 	@echo "... src/nn/linear.o"
 	@echo "... src/nn/linear.i"
 	@echo "... src/nn/linear.s"
@@ -560,6 +801,9 @@ help:
 	@echo "... src/nn/swiglu.o"
 	@echo "... src/nn/swiglu.i"
 	@echo "... src/nn/swiglu.s"
+	@echo "... src/nn/transforrmer_block.o"
+	@echo "... src/nn/transforrmer_block.i"
+	@echo "... src/nn/transforrmer_block.s"
 	@echo "... src/tensor/tensor.o"
 	@echo "... src/tensor/tensor.i"
 	@echo "... src/tensor/tensor.s"
