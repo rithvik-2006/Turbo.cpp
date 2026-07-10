@@ -12,4 +12,6 @@ add_test([=[LayerTest.EmbeddingOutOfBounds]=]  /home/manne-rithvik/CodingStuff/t
 set_tests_properties([=[LayerTest.EmbeddingOutOfBounds]=]  PROPERTIES WORKING_DIRECTORY /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[LayerTest.RMSNormForwardPass]=]  /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests/tensor_test [==[--gtest_filter=LayerTest.RMSNormForwardPass]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[LayerTest.RMSNormForwardPass]=]  PROPERTIES WORKING_DIRECTORY /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  tensor_test_TESTS LayerTest.NumericallyStableSoftmax LayerTest.LinearForwardPass LayerTest.SwiGLUForwardPass LayerTest.SwiGLUInvalidShape LayerTest.EmbeddingForwardPass LayerTest.EmbeddingOutOfBounds LayerTest.RMSNormForwardPass)
+add_test([=[LayerTest.RoPEForwardPass]=]  /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests/tensor_test [==[--gtest_filter=LayerTest.RoPEForwardPass]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[LayerTest.RoPEForwardPass]=]  PROPERTIES WORKING_DIRECTORY /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  tensor_test_TESTS LayerTest.NumericallyStableSoftmax LayerTest.LinearForwardPass LayerTest.SwiGLUForwardPass LayerTest.SwiGLUInvalidShape LayerTest.EmbeddingForwardPass LayerTest.EmbeddingOutOfBounds LayerTest.RMSNormForwardPass LayerTest.RoPEForwardPass)

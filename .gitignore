@@ -27,3 +27,8 @@ _deps/
 # Compiled Binaries
 ./turbo
 ./tests/tensor_test
+
+# OS and Editor Cache
+.clangd/
+.cache/
+.DS_Store

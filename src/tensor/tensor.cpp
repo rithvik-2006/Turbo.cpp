@@ -91,10 +91,19 @@ bool Tensor::is_contiguous() const {
 // --- View Manipulators ---
 
 Tensor Tensor::transpose() const {
-  if (shape.size() != 2)
-    throw std::invalid_argument("Transpose currently expects a 2D tensor.");
-  vector<size_t> new_shape = {shape[1], shape[0]};
-  vector<size_t> new_strides = {strides[1], strides[0]};
+  if (rank() != 2)
+    throw std::invalid_argument("transpose() without args requires a 2D tensor.");
+  return transpose(0, 1);
+}
+
+Tensor Tensor::transpose(size_t dim0, size_t dim1) const {
+  if (dim0 >= rank() || dim1 >= rank()) {
+    throw std::out_of_range("Transpose dimensions out of bounds");
+  }
+  std::vector<size_t> new_shape = shape;
+  std::vector<size_t> new_strides = strides;
+  std::swap(new_shape[dim0], new_shape[dim1]);
+  std::swap(new_strides[dim0], new_strides[dim1]);
   return Tensor(storage, offset, new_shape, new_strides);
 }
 
@@ -198,6 +207,18 @@ Tensor Tensor::operator+(const Tensor &other) const {
   for (size_t i = 0; i < total_elements; ++i) {
     vector<size_t> idx = unravel_index(i, target_shape);
     result.at(idx) = a_bcast.at(idx) + b_bcast.at(idx);
+  }
+  return result;
+}
+
+Tensor Tensor::operator*(float scalar) const {
+  size_t total_elements = numel();
+  vector<float> out_data(total_elements, 0.0f);
+  Tensor result(out_data, shape);
+  
+  for (size_t i = 0; i < total_elements; ++i) {
+    vector<size_t> idx = unravel_index(i, shape);
+    result.at(idx) = this->at(idx) * scalar;
   }
   return result;
 }

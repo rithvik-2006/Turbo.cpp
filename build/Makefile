@@ -299,6 +299,30 @@ benchmarks/benchmark_gemm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.s
 .PHONY : benchmarks/benchmark_gemm.cpp.s
 
+src/nn/attention.o: src/nn/attention.cpp.o
+.PHONY : src/nn/attention.o
+
+# target to build an object file
+src/nn/attention.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o
+.PHONY : src/nn/attention.cpp.o
+
+src/nn/attention.i: src/nn/attention.cpp.i
+.PHONY : src/nn/attention.i
+
+# target to preprocess a source file
+src/nn/attention.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.i
+.PHONY : src/nn/attention.cpp.i
+
+src/nn/attention.s: src/nn/attention.cpp.s
+.PHONY : src/nn/attention.s
+
+# target to generate assembly for a file
+src/nn/attention.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.s
+.PHONY : src/nn/attention.cpp.s
+
 src/nn/embedding.o: src/nn/embedding.cpp.o
 .PHONY : src/nn/embedding.o
 
@@ -370,6 +394,30 @@ src/nn/rmsnorm.s: src/nn/rmsnorm.cpp.s
 src/nn/rmsnorm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.s
 .PHONY : src/nn/rmsnorm.cpp.s
+
+src/nn/rope.o: src/nn/rope.cpp.o
+.PHONY : src/nn/rope.o
+
+# target to build an object file
+src/nn/rope.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o
+.PHONY : src/nn/rope.cpp.o
+
+src/nn/rope.i: src/nn/rope.cpp.i
+.PHONY : src/nn/rope.i
+
+# target to preprocess a source file
+src/nn/rope.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.i
+.PHONY : src/nn/rope.cpp.i
+
+src/nn/rope.s: src/nn/rope.cpp.s
+.PHONY : src/nn/rope.s
+
+# target to generate assembly for a file
+src/nn/rope.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.s
+.PHONY : src/nn/rope.cpp.s
 
 src/nn/softmax.o: src/nn/softmax.cpp.o
 .PHONY : src/nn/softmax.o
@@ -491,6 +539,9 @@ help:
 	@echo "... benchmarks/benchmark_gemm.o"
 	@echo "... benchmarks/benchmark_gemm.i"
 	@echo "... benchmarks/benchmark_gemm.s"
+	@echo "... src/nn/attention.o"
+	@echo "... src/nn/attention.i"
+	@echo "... src/nn/attention.s"
 	@echo "... src/nn/embedding.o"
 	@echo "... src/nn/embedding.i"
 	@echo "... src/nn/embedding.s"
@@ -500,6 +551,9 @@ help:
 	@echo "... src/nn/rmsnorm.o"
 	@echo "... src/nn/rmsnorm.i"
 	@echo "... src/nn/rmsnorm.s"
+	@echo "... src/nn/rope.o"
+	@echo "... src/nn/rope.i"
+	@echo "... src/nn/rope.s"
 	@echo "... src/nn/softmax.o"
 	@echo "... src/nn/softmax.i"
 	@echo "... src/nn/softmax.s"

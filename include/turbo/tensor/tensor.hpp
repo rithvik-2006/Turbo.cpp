@@ -58,6 +58,7 @@ public:
 
   // View Manipulators (Zero-Copy)
   Tensor transpose() const;
+  Tensor transpose(size_t dim0, size_t dim1) const;
   Tensor slice(size_t dim, size_t index) const;
   Tensor reshape(const std::vector<size_t> &new_shape) const;
   Tensor flatten() const;
@@ -67,6 +68,7 @@ public:
 
   // Math Operations
   Tensor operator+(const Tensor &other) const;
+  Tensor operator*(float scalar) const;
 
   // Matrix Multiplication
   Tensor matmul(const Tensor &other) const;

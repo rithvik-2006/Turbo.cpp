@@ -209,6 +209,30 @@ test_nn.cpp.s:
 	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_nn.cpp.s
 .PHONY : test_nn.cpp.s
 
+test_rope.o: test_rope.cpp.o
+.PHONY : test_rope.o
+
+# target to build an object file
+test_rope.cpp.o:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o
+.PHONY : test_rope.cpp.o
+
+test_rope.i: test_rope.cpp.i
+.PHONY : test_rope.i
+
+# target to preprocess a source file
+test_rope.cpp.i:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_rope.cpp.i
+.PHONY : test_rope.cpp.i
+
+test_rope.s: test_rope.cpp.s
+.PHONY : test_rope.s
+
+# target to generate assembly for a file
+test_rope.cpp.s:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_rope.cpp.s
+.PHONY : test_rope.cpp.s
+
 test_tensor.o: test_tensor.cpp.o
 .PHONY : test_tensor.o
 
@@ -250,6 +274,9 @@ help:
 	@echo "... test_nn.o"
 	@echo "... test_nn.i"
 	@echo "... test_nn.s"
+	@echo "... test_rope.o"
+	@echo "... test_rope.i"
+	@echo "... test_rope.s"
 	@echo "... test_tensor.o"
 	@echo "... test_tensor.i"
 	@echo "... test_tensor.s"

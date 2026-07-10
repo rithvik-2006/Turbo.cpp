@@ -153,6 +153,34 @@ CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/rmsnorm.cpp -o CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.s
 
+CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o: CMakeFiles/tensor_lib.dir/flags.make
+CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/rope.cpp
+CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o: CMakeFiles/tensor_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o -MF CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o.d -o CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/rope.cpp
+
+CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/rope.cpp > CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.i
+
+CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/rope.cpp -o CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.s
+
+CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o: CMakeFiles/tensor_lib.dir/flags.make
+CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/attention.cpp
+CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o: CMakeFiles/tensor_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o -MF CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o.d -o CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/attention.cpp
+
+CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/attention.cpp > CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.i
+
+CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/src/nn/attention.cpp -o CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.s
+
 # Object files for target tensor_lib
 tensor_lib_OBJECTS = \
 "CMakeFiles/tensor_lib.dir/src/tensor/tensor.cpp.o" \
@@ -160,7 +188,9 @@ tensor_lib_OBJECTS = \
 "CMakeFiles/tensor_lib.dir/src/nn/linear.cpp.o" \
 "CMakeFiles/tensor_lib.dir/src/nn/swiglu.cpp.o" \
 "CMakeFiles/tensor_lib.dir/src/nn/embedding.cpp.o" \
-"CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.o"
+"CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.o" \
+"CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o" \
+"CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o"
 
 # External object files for target tensor_lib
 tensor_lib_EXTERNAL_OBJECTS =
@@ -171,9 +201,11 @@ libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/nn/linear.cpp.o
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/nn/swiglu.cpp.o
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/nn/embedding.cpp.o
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/nn/rmsnorm.cpp.o
+libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/nn/rope.cpp.o
+libtensor_lib.a: CMakeFiles/tensor_lib.dir/src/nn/attention.cpp.o
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/build.make
 libtensor_lib.a: CMakeFiles/tensor_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libtensor_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX static library libtensor_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/tensor_lib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tensor_lib.dir/link.txt --verbose=$(VERBOSE)
 
