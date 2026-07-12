@@ -6,12 +6,16 @@
 #include "softmax.hpp"
 
 namespace turbo {
+
+class KVCache;
+
 namespace nn {
 
 class MultiHeadAttention : public Layer {
 private:
   size_t embed_dim;
   size_t num_heads;
+  size_t num_kv_heads;
   size_t head_dim;
 
   // Sub-components
@@ -24,15 +28,21 @@ private:
   Softmax softmax;
 
 public:
-  MultiHeadAttention(size_t embed_dim, size_t num_heads,
+public:
+  // Zero-copy constructor
+  // Zero-copy constructor
+  MultiHeadAttention(Tensor q, Tensor k, Tensor v, Tensor o, 
+                     size_t embed_dim, size_t num_heads, size_t num_kv_heads, size_t max_seq_len = 4096);
+
+  // Legacy constructor
+  MultiHeadAttention(size_t embed_dim, size_t num_heads, size_t num_kv_heads,
                      size_t max_seq_len = 4096);
 
   // Standard forward pass (for Prefill phase)
   Tensor forward(const Tensor &input) override;
 
-  // Overloaded forward pass for Decode phase (requires position tracking for
-  // RoPE)
-  Tensor forward(const Tensor &input, size_t position_offset);
+  // Overloaded forward pass for Decode phase (requires position tracking for RoPE and KVCache)
+  Tensor forward(const Tensor &input, size_t position_offset, KVCache* kv_cache = nullptr, int layer_idx = -1);
 };
 
 } // namespace nn

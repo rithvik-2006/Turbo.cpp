@@ -12,6 +12,12 @@ private:
   size_t embedding_dim;  // Vector dimension
 
 public:
+  // Default constructor
+  Embedding() = default;
+
+  // Zero-copy constructor
+  Embedding(Tensor w);
+
   Embedding(size_t num_embeddings, size_t embedding_dim);
 
   // forward pass takes a 1D tensor of Token IDs

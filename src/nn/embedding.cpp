@@ -1,13 +1,21 @@
 // src/nn/embedding.cpp
 #include "../../include/turbo/nn/embedding.hpp"
+#include "../../src/tensor/quant_math.hpp"
 #include <stdexcept>
 
 namespace turbo {
 namespace nn {
 
+Embedding::Embedding(Tensor w)
+    : weight(std::move(w)),
+      num_embeddings(weight.get_shape().size() > 1 ? weight.get_shape()[1] : (weight.get_shape().size() > 0 ? weight.get_shape()[0] : 0)),
+      embedding_dim(weight.get_shape().size() > 0 ? weight.get_shape()[0] : 0) {
+    // In GGUF, token_embd.weight is [hidden_dim, vocab_size] where shape[0]=hidden_dim, shape[1]=vocab_size
+}
+
 Embedding::Embedding(size_t num_embeddings, size_t embedding_dim)
     : num_embeddings(num_embeddings), embedding_dim(embedding_dim),
-      weight(std::vector<float>(num_embeddings * embedding_dim, 0.0f), {num_embeddings, embedding_dim}) {
+      weight(std::vector<float>(num_embeddings * embedding_dim, 0.0f), {embedding_dim, num_embeddings}) {
   // In production, weights are populated by the GGUF loader.
 }
 
@@ -18,18 +26,53 @@ Tensor Embedding::forward(const Tensor &input_ids) {
   }
 
   // Optimization for Decode Phase (1 token at a time)
-  // If we only have 1 token, we can use an O(1) zero-copy slice!
   if (input_ids.get_shape()[0] == 1) {
-    // Assume Token IDs are stored as floats in our current architecture
-    // (In a complete engine, you would cast from an int32 tensor)
     size_t token_id = static_cast<size_t>(input_ids.at({0}));
 
     if (token_id >= num_embeddings) {
-      throw std::out_of_range("Token ID exceeds vocabulary size.");
+      throw std::out_of_range("Token ID " + std::to_string(token_id) + " exceeds vocabulary size " + std::to_string(num_embeddings));
     }
 
-    // Return a zero-copy 1D slice reshaped to 2D
-    return weight.slice(0, token_id).reshape({1, embedding_dim});
+    // We must copy the token embedding because it is likely strided (non-contiguous)
+    // in the weight matrix if shape is [embedding_dim, num_embeddings].
+    std::vector<float> output_data(embedding_dim);
+    
+    if (weight.dtype() == DataType::FP32) {
+        Tensor emb = weight.slice(1, token_id);
+        for (size_t d = 0; d < embedding_dim; ++d) {
+            output_data[d] = emb.at({d});
+        }
+    } else if (weight.dtype() == DataType::Q8_0) {
+        size_t row_bytes = (embedding_dim / 32) * 34;
+        const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
+        
+        const block_q8_0* x = reinterpret_cast<const block_q8_0*>(row_ptr);
+        int nb = embedding_dim / 32;
+        for (int b = 0; b < nb; b++) {
+            float d = fp16_to_fp32(x[b].d);
+            for (int j = 0; j < 32; j++) {
+                output_data[b * 32 + j] = x[b].qs[j] * d;
+            }
+        }
+    } else if (weight.dtype() == DataType::Q4_0) {
+        size_t row_bytes = (embedding_dim / 32) * 18;
+        const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
+        
+        const block_q4_0* x = reinterpret_cast<const block_q4_0*>(row_ptr);
+        int nb = embedding_dim / 32;
+        for (int b = 0; b < nb; b++) {
+            float d = fp16_to_fp32(x[b].d);
+            for (int j = 0; j < 16; j++) {
+                uint8_t packed = x[b].qs[j];
+                output_data[b * 32 + j] = ((packed & 0x0F) - 8) * d;
+                output_data[b * 32 + j + 16] = ((packed >> 4) - 8) * d;
+            }
+        }
+    } else {
+        throw std::runtime_error("Unsupported embedding dtype");
+    }
+
+    return Tensor(output_data, {1, embedding_dim});
   }
 
   // For Prefill Phase (Batched tokens)
@@ -43,12 +86,47 @@ Tensor Embedding::forward(const Tensor &input_ids) {
     size_t token_id = static_cast<size_t>(input_ids.at({i}));
 
     if (token_id >= num_embeddings) {
-      throw std::out_of_range("Token ID exceeds vocabulary size.");
+      throw std::out_of_range("Token ID " + std::to_string(token_id) + " exceeds vocabulary size " + std::to_string(num_embeddings) + ". Shape: " + std::to_string(weight.get_shape()[0]) + ", " + std::to_string(weight.get_shape()[1]));
     }
 
     // Extract the correct row from the weights
-    for (size_t j = 0; j < embedding_dim; ++j) {
-      output.at({i, j}) = weight.at({token_id, j});
+    if (weight.dtype() == DataType::FP32) {
+      for (size_t j = 0; j < embedding_dim; ++j) {
+        output.at({i, j}) = weight.at({j, token_id});
+      }
+    } else if (weight.dtype() == DataType::Q8_0) {
+      // It's [embedding_dim, num_embeddings] (i.e. [cols, rows])
+      // So there are `num_embeddings` rows and each row has `embedding_dim` elements!
+      // In llama.cpp, token_embd.weight is usually just copied as a row.
+      size_t row_bytes = (embedding_dim / 32) * 34; // QK8_0 is 32, block size is 34
+      const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
+      
+      const block_q8_0* x = reinterpret_cast<const block_q8_0*>(row_ptr);
+      int nb = embedding_dim / 32;
+      for (int b = 0; b < nb; b++) {
+          float d = fp16_to_fp32(x[b].d);
+          for (int j = 0; j < 32; j++) {
+              output.at({i, b * 32 + j}) = x[b].qs[j] * d;
+          }
+      }
+    } else if (weight.dtype() == DataType::Q4_0) {
+      size_t row_bytes = (embedding_dim / 32) * 18; // QK4_0 is 32, block size is 18
+      const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
+      
+      const block_q4_0* x = reinterpret_cast<const block_q4_0*>(row_ptr);
+      int nb = embedding_dim / 32;
+      for (int b = 0; b < nb; b++) {
+          float d = fp16_to_fp32(x[b].d);
+          for (int j = 0; j < 16; j++) {
+              uint8_t packed = x[b].qs[j];
+              int8_t w0 = (packed & 0x0F) - 8;
+              int8_t w1 = (packed >> 4) - 8;
+              output.at({i, b * 32 + j}) = w0 * d;
+              output.at({i, b * 32 + j + 16}) = w1 * d;
+          }
+      }
+    } else {
+        throw std::runtime_error("Unsupported embedding dtype");
     }
   }
 

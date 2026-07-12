@@ -15,7 +15,13 @@ private:
   size_t out_features;
 
 public:
-  // The constructor allocates the weight and bias tensors
+  // Default constructor for lazy initialization
+  Linear() = default;
+
+  // Constructor from GGUF loaded tensors (Zero-copy)
+  Linear(Tensor w, Tensor b = Tensor());
+
+  // The constructor allocates the weight and bias tensors (Legacy)
   Linear(size_t in_features, size_t out_features);
 
   // The execution contract

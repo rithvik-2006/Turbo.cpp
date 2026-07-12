@@ -10,6 +10,7 @@ public:
   SwiGLU() = default;
 
   // The execution contract
+  Tensor forward(const Tensor &gate, const Tensor &up);
   Tensor forward(const Tensor &input) override;
 };
 

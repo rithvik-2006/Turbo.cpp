@@ -6,6 +6,10 @@
 namespace turbo {
 namespace nn {
 
+RMSNorm::RMSNorm(Tensor w, float epsilon)
+    : weight(std::move(w)), epsilon(epsilon), 
+      hidden_size(weight.get_shape().size() > 0 ? weight.get_shape()[0] : 0) {}
+
 RMSNorm::RMSNorm(size_t hidden_size, float epsilon)
     : hidden_size(hidden_size), epsilon(epsilon),
       weight(std::vector<float>(hidden_size, 0.0f), {hidden_size}) {
@@ -21,6 +25,9 @@ Tensor RMSNorm::forward(const Tensor &input) {
   if (in_shape.empty() || in_shape.back() != hidden_size) {
     throw std::invalid_argument("Input last dimension must match hidden_size.");
   }
+  if (weight.dtype() != DataType::FP32) {
+    throw std::runtime_error("RMSNorm weight must be FP32! Found dtype: " + std::to_string(static_cast<int>(weight.dtype())));
+  }
 
   size_t numel = 1;
   for (auto d : in_shape) numel *= d;
@@ -33,12 +40,17 @@ Tensor RMSNorm::forward(const Tensor &input) {
     rows *= in_shape[i];
   }
 
+  const float* in_ptr = input.data_ptr();
+  float* out_ptr = output.data_ptr();
+
   // Process each row independently
   for (size_t i = 0; i < rows; ++i) {
+    size_t row_offset = i * hidden_size;
+    
     // 1. Calculate Sum of Squares
     float sum_of_squares = 0.0f;
     for (size_t j = 0; j < hidden_size; ++j) {
-      float val = input.at({i, j});
+      float val = in_ptr[row_offset + j];
       sum_of_squares += val * val;
     }
 
@@ -48,7 +60,7 @@ Tensor RMSNorm::forward(const Tensor &input) {
 
     // 3. Normalize and apply the learned weight vector
     for (size_t j = 0; j < hidden_size; ++j) {
-      output.at({i, j}) = (input.at({i, j}) / rms) * weight.at({j});
+      out_ptr[row_offset + j] = (in_ptr[row_offset + j] / rms) * weight.data_ptr()[j];
     }
   }
 

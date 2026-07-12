@@ -7,45 +7,40 @@
 namespace turbo {
 namespace nn {
 
-Tensor SwiGLU::forward(const Tensor &input) {
-  auto in_shape = input.get_shape();
-  if (in_shape.empty() || in_shape.back() % 2 != 0) {
-    throw std::invalid_argument(
-        "SwiGLU requires the last dimension to be even for splitting.");
-  }
+Tensor SwiGLU::forward(const Tensor &gate, const Tensor &up) {
+  auto gate_shape = gate.get_shape();
+  auto up_shape = up.get_shape();
 
-  // 1. Calculate new shape (hidden dimension is halved)
-  std::vector<size_t> out_shape = in_shape;
-  size_t half_dim = in_shape.back() / 2;
-  out_shape.back() = half_dim;
+  if (gate_shape != up_shape) {
+    throw std::invalid_argument("SwiGLU requires gate and up tensors to have the same shape.");
+  }
 
   // Allocate the output tensor
-  size_t numel = 1;
-  for (size_t dim : out_shape) numel *= dim;
+  size_t numel = gate.numel();
   std::vector<float> zeros(numel, 0.0f);
-  Tensor output(zeros, out_shape);
+  Tensor output(zeros, gate_shape);
 
-  size_t rows = 1;
-  for (size_t i = 0; i < in_shape.size() - 1; ++i) {
-    rows *= in_shape[i];
-  }
+  const float* gate_ptr = gate.data_ptr();
+  const float* up_ptr = up.data_ptr();
+  float* out_ptr = output.data_ptr();
 
   // 2. Element-wise C++ Loop for SwiGLU
-  for (size_t i = 0; i < rows; ++i) {
-    for (size_t j = 0; j < half_dim; ++j) {
-      // Extract X1 (first half) and X2 (second half)
-      float x1 = input.at({i, j});
-      float x2 = input.at({i, j + half_dim});
+  for (size_t i = 0; i < numel; ++i) {
+    float x1 = gate_ptr[i];
+    float x2 = up_ptr[i];
 
-      // Apply SiLU to X1: x1 / (1.0 + exp(-x1))
-      float silu_x1 = x1 / (1.0f + std::exp(-x1));
+    // Apply SiLU to X1: x1 / (1.0 + exp(-x1))
+    float silu_x1 = x1 / (1.0f + std::exp(-x1));
 
-      // Element-wise multiplication and write to output
-      output.at({i, j}) = silu_x1 * x2;
-    }
+    // Multiply by X2
+    out_ptr[i] = silu_x1 * x2;
   }
 
   return output;
+}
+
+Tensor SwiGLU::forward(const Tensor &input) {
+  throw std::runtime_error("SwiGLU::forward(const Tensor &input) is deprecated. Use forward(gate, up).");
 }
 
 } // namespace nn

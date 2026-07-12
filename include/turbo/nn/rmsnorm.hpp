@@ -13,6 +13,12 @@ private:
     size_t hidden_size;
 
 public:
+    // Default constructor
+    RMSNorm() = default;
+
+    // Zero-copy constructor
+    RMSNorm(Tensor w, float epsilon = 1e-5f);
+
     // hidden_size defines the last dimension, epsilon prevents div by zero
     RMSNorm(size_t hidden_size, float epsilon = 1e-5f);
     

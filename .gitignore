@@ -32,3 +32,26 @@ _deps/
 .clangd/
 .cache/
 .DS_Store
+
+# Python and virtual environments
+.venv/
+__pycache__/
+
+# Large Model files
+*.gguf
+
+# Profiling data
+perf.data
+perf.data.old
+
+# Temporary test binaries and scripts
+a.out
+test_struct.cpp
+test_tiny.py
+input.txt
+
+# Root Binaries
+/turbo
+/turbo_benchmark
+/benchmark_gemm
+

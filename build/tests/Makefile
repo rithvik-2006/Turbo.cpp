@@ -209,6 +209,30 @@ test_nn.cpp.s:
 	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_nn.cpp.s
 .PHONY : test_nn.cpp.s
 
+test_quant.o: test_quant.cpp.o
+.PHONY : test_quant.o
+
+# target to build an object file
+test_quant.cpp.o:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o
+.PHONY : test_quant.cpp.o
+
+test_quant.i: test_quant.cpp.i
+.PHONY : test_quant.i
+
+# target to preprocess a source file
+test_quant.cpp.i:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_quant.cpp.i
+.PHONY : test_quant.cpp.i
+
+test_quant.s: test_quant.cpp.s
+.PHONY : test_quant.s
+
+# target to generate assembly for a file
+test_quant.cpp.s:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_quant.cpp.s
+.PHONY : test_quant.cpp.s
+
 test_rope.o: test_rope.cpp.o
 .PHONY : test_rope.o
 
@@ -257,6 +281,30 @@ test_tensor.cpp.s:
 	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.s
 .PHONY : test_tensor.cpp.s
 
+test_tokenizer.o: test_tokenizer.cpp.o
+.PHONY : test_tokenizer.o
+
+# target to build an object file
+test_tokenizer.cpp.o:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o
+.PHONY : test_tokenizer.cpp.o
+
+test_tokenizer.i: test_tokenizer.cpp.i
+.PHONY : test_tokenizer.i
+
+# target to preprocess a source file
+test_tokenizer.cpp.i:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.i
+.PHONY : test_tokenizer.cpp.i
+
+test_tokenizer.s: test_tokenizer.cpp.s
+.PHONY : test_tokenizer.s
+
+# target to generate assembly for a file
+test_tokenizer.cpp.s:
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tensor_test.dir/build.make tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.s
+.PHONY : test_tokenizer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -274,12 +322,18 @@ help:
 	@echo "... test_nn.o"
 	@echo "... test_nn.i"
 	@echo "... test_nn.s"
+	@echo "... test_quant.o"
+	@echo "... test_quant.i"
+	@echo "... test_quant.s"
 	@echo "... test_rope.o"
 	@echo "... test_rope.i"
 	@echo "... test_rope.s"
 	@echo "... test_tensor.o"
 	@echo "... test_tensor.i"
 	@echo "... test_tensor.s"
+	@echo "... test_tokenizer.o"
+	@echo "... test_tokenizer.i"
+	@echo "... test_tokenizer.s"
 .PHONY : help
 
 

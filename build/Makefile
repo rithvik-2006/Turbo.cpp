@@ -185,6 +185,19 @@ benchmark_gemm/fast:
 .PHONY : benchmark_gemm/fast
 
 #=============================================================================
+# Target rules for targets named benchmark_quant
+
+# Build rule for target.
+benchmark_quant: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmark_quant
+.PHONY : benchmark_quant
+
+# fast build rule for target.
+benchmark_quant/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_quant.dir/build.make CMakeFiles/benchmark_quant.dir/build
+.PHONY : benchmark_quant/fast
+
+#=============================================================================
 # Target rules for targets named tensor_lib
 
 # Build rule for target.
@@ -235,6 +248,19 @@ run_loader: cmake_check_build_system
 run_loader/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_loader.dir/build.make CMakeFiles/run_loader.dir/build
 .PHONY : run_loader/fast
+
+#=============================================================================
+# Target rules for targets named turbo_chat
+
+# Build rule for target.
+turbo_chat: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 turbo_chat
+.PHONY : turbo_chat
+
+# fast build rule for target.
+turbo_chat/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo_chat.dir/build.make CMakeFiles/turbo_chat.dir/build
+.PHONY : turbo_chat/fast
 
 #=============================================================================
 # Target rules for targets named tensor_test
@@ -325,6 +351,30 @@ benchmarks/benchmark_gemm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_gemm.dir/build.make CMakeFiles/benchmark_gemm.dir/benchmarks/benchmark_gemm.cpp.s
 .PHONY : benchmarks/benchmark_gemm.cpp.s
 
+benchmarks/benchmark_quant.o: benchmarks/benchmark_quant.cpp.o
+.PHONY : benchmarks/benchmark_quant.o
+
+# target to build an object file
+benchmarks/benchmark_quant.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_quant.dir/build.make CMakeFiles/benchmark_quant.dir/benchmarks/benchmark_quant.cpp.o
+.PHONY : benchmarks/benchmark_quant.cpp.o
+
+benchmarks/benchmark_quant.i: benchmarks/benchmark_quant.cpp.i
+.PHONY : benchmarks/benchmark_quant.i
+
+# target to preprocess a source file
+benchmarks/benchmark_quant.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_quant.dir/build.make CMakeFiles/benchmark_quant.dir/benchmarks/benchmark_quant.cpp.i
+.PHONY : benchmarks/benchmark_quant.cpp.i
+
+benchmarks/benchmark_quant.s: benchmarks/benchmark_quant.cpp.s
+.PHONY : benchmarks/benchmark_quant.s
+
+# target to generate assembly for a file
+benchmarks/benchmark_quant.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/benchmark_quant.dir/build.make CMakeFiles/benchmark_quant.dir/benchmarks/benchmark_quant.cpp.s
+.PHONY : benchmarks/benchmark_quant.cpp.s
+
 examples/run_generation.o: examples/run_generation.cpp.o
 .PHONY : examples/run_generation.o
 
@@ -397,6 +447,30 @@ src/core/generate.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/generate.cpp.s
 .PHONY : src/core/generate.cpp.s
 
+src/core/kv_cache.o: src/core/kv_cache.cpp.o
+.PHONY : src/core/kv_cache.o
+
+# target to build an object file
+src/core/kv_cache.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/kv_cache.cpp.o
+.PHONY : src/core/kv_cache.cpp.o
+
+src/core/kv_cache.i: src/core/kv_cache.cpp.i
+.PHONY : src/core/kv_cache.i
+
+# target to preprocess a source file
+src/core/kv_cache.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/kv_cache.cpp.i
+.PHONY : src/core/kv_cache.cpp.i
+
+src/core/kv_cache.s: src/core/kv_cache.cpp.s
+.PHONY : src/core/kv_cache.s
+
+# target to generate assembly for a file
+src/core/kv_cache.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/kv_cache.cpp.s
+.PHONY : src/core/kv_cache.cpp.s
+
 src/core/sampler.o: src/core/sampler.cpp.o
 .PHONY : src/core/sampler.o
 
@@ -421,6 +495,30 @@ src/core/sampler.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/sampler.cpp.s
 .PHONY : src/core/sampler.cpp.s
 
+src/core/tokenizer.o: src/core/tokenizer.cpp.o
+.PHONY : src/core/tokenizer.o
+
+# target to build an object file
+src/core/tokenizer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/tokenizer.cpp.o
+.PHONY : src/core/tokenizer.cpp.o
+
+src/core/tokenizer.i: src/core/tokenizer.cpp.i
+.PHONY : src/core/tokenizer.i
+
+# target to preprocess a source file
+src/core/tokenizer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/tokenizer.cpp.i
+.PHONY : src/core/tokenizer.cpp.i
+
+src/core/tokenizer.s: src/core/tokenizer.cpp.s
+.PHONY : src/core/tokenizer.s
+
+# target to generate assembly for a file
+src/core/tokenizer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/core/tokenizer.cpp.s
+.PHONY : src/core/tokenizer.cpp.s
+
 src/loader/gguf_loader.o: src/loader/gguf_loader.cpp.o
 .PHONY : src/loader/gguf_loader.o
 
@@ -444,6 +542,30 @@ src/loader/gguf_loader.s: src/loader/gguf_loader.cpp.s
 src/loader/gguf_loader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tensor_lib.dir/build.make CMakeFiles/tensor_lib.dir/src/loader/gguf_loader.cpp.s
 .PHONY : src/loader/gguf_loader.cpp.s
+
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo_chat.dir/build.make CMakeFiles/turbo_chat.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo_chat.dir/build.make CMakeFiles/turbo_chat.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/turbo_chat.dir/build.make CMakeFiles/turbo_chat.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 src/model/minigpt.o: src/model/minigpt.cpp.o
 .PHONY : src/model/minigpt.o
@@ -747,6 +869,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... benchmark_gemm"
+	@echo "... benchmark_quant"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
@@ -756,9 +879,13 @@ help:
 	@echo "... tensor_lib"
 	@echo "... tensor_test"
 	@echo "... turbo"
+	@echo "... turbo_chat"
 	@echo "... benchmarks/benchmark_gemm.o"
 	@echo "... benchmarks/benchmark_gemm.i"
 	@echo "... benchmarks/benchmark_gemm.s"
+	@echo "... benchmarks/benchmark_quant.o"
+	@echo "... benchmarks/benchmark_quant.i"
+	@echo "... benchmarks/benchmark_quant.s"
 	@echo "... examples/run_generation.o"
 	@echo "... examples/run_generation.i"
 	@echo "... examples/run_generation.s"
@@ -768,12 +895,21 @@ help:
 	@echo "... src/core/generate.o"
 	@echo "... src/core/generate.i"
 	@echo "... src/core/generate.s"
+	@echo "... src/core/kv_cache.o"
+	@echo "... src/core/kv_cache.i"
+	@echo "... src/core/kv_cache.s"
 	@echo "... src/core/sampler.o"
 	@echo "... src/core/sampler.i"
 	@echo "... src/core/sampler.s"
+	@echo "... src/core/tokenizer.o"
+	@echo "... src/core/tokenizer.i"
+	@echo "... src/core/tokenizer.s"
 	@echo "... src/loader/gguf_loader.o"
 	@echo "... src/loader/gguf_loader.i"
 	@echo "... src/loader/gguf_loader.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 	@echo "... src/model/minigpt.o"
 	@echo "... src/model/minigpt.i"
 	@echo "... src/model/minigpt.s"

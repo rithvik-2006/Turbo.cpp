@@ -6,6 +6,17 @@ namespace turbo {
 
 // --- Pointer Arithmetic Helpers ---
 
+DataType map_ggml_type(uint32_t ggml_type) {
+    switch(ggml_type) {
+        case GGML_TYPE_F32:  return DataType::FP32;
+        case GGML_TYPE_F16:  return DataType::FP16;
+        case GGML_TYPE_Q8_0: return DataType::Q8_0;
+        case GGML_TYPE_Q4_0: return DataType::Q4_0;
+        default: 
+            throw std::runtime_error("Unsupported GGUF tensor type encountered: " + std::to_string(ggml_type));
+    }
+}
+
 template <typename T>
 T GGUFLoader::read_value(const uint8_t*& ptr) {
     T val;
@@ -65,9 +76,43 @@ void GGUFLoader::parse() {
         std::string key = read_string(ptr);
         uint32_t type = read_value<uint32_t>(ptr);
         
+        std::cout << "[GGUF] Key: " << key << " (type: " << type << ")\n";
+        
         // Extract alignment if present (critical for calculating final tensor offsets)
         if (key == "general.alignment" && type == GGUF_TYPE_UINT32) {
             alignment_ = read_value<uint32_t>(ptr);
+        } else if (key == "llama.block_count" && type == GGUF_TYPE_UINT32) {
+            num_layers_ = read_value<uint32_t>(ptr);
+        } else if (key == "llama.embedding_length" && type == GGUF_TYPE_UINT32) {
+            hidden_dim_ = read_value<uint32_t>(ptr);
+        } else if (key == "llama.attention.head_count" && type == GGUF_TYPE_UINT32) {
+            num_heads_ = read_value<uint32_t>(ptr);
+        } else if (key == "llama.attention.head_count_kv" && type == GGUF_TYPE_UINT32) {
+            num_kv_heads_ = read_value<uint32_t>(ptr);
+        } else if (key == "llama.context_length" && type == GGUF_TYPE_UINT32) {
+            context_length_ = read_value<uint32_t>(ptr);
+        } else if (key == "tokenizer.ggml.tokens" && type == GGUF_TYPE_ARRAY) {
+            uint32_t arr_type = read_value<uint32_t>(ptr);
+            uint64_t arr_len = read_value<uint64_t>(ptr);
+            if (arr_type != GGUF_TYPE_STRING) {
+                throw std::runtime_error("tokenizer.ggml.tokens must be an array of strings.");
+            }
+            vocab_tokens_.reserve(arr_len);
+            for (uint64_t j = 0; j < arr_len; ++j) {
+                vocab_tokens_.push_back(read_string(ptr));
+            }
+        } else if (key == "tokenizer.ggml.scores" && type == GGUF_TYPE_ARRAY) {
+            uint32_t arr_type = read_value<uint32_t>(ptr);
+            uint64_t arr_len = read_value<uint64_t>(ptr);
+            if (arr_type != GGUF_TYPE_FLOAT32) {
+                throw std::runtime_error("tokenizer.ggml.scores must be an array of floats.");
+            }
+            vocab_scores_.reserve(arr_len);
+            for (uint64_t j = 0; j < arr_len; ++j) {
+                vocab_scores_.push_back(read_value<float>(ptr));
+            }
+        } else if (key == "tokenizer.chat_template" && type == GGUF_TYPE_STRING) {
+            chat_template_ = read_string(ptr);
         } else {
             skip_metadata_value(ptr, type); // Skip payloads we don't immediately need
         }
@@ -119,8 +164,22 @@ Tensor GGUFLoader::get_tensor(const std::string& name) {
     uint8_t* file_base = static_cast<uint8_t*>(const_cast<void*>(file_.data()));
     uint8_t* target_tensor_ptr = file_base + data_offset_ + info.offset;
 
+    // Translate the primitive GGML integer type into our engine's DataType
+    DataType tensor_type = map_ggml_type(info.type);
+
+    // Calculate expected size
+    size_t num_elements = 1;
+    for (auto d : info.shape) num_elements *= d;
+    size_t block_size = get_block_size(tensor_type);
+    size_t type_size = get_type_size(tensor_type);
+    size_t total_bytes = (num_elements / block_size) * type_size;
+
+    if (data_offset_ + info.offset + total_bytes > file_.size()) {
+        throw std::runtime_error("Tensor '" + name + "' is beyond the end of the file. The GGUF file is truncated or corrupted!");
+    }
+
     // 3. Return initialized tensor wrapper pointing precisely to the file page
-    return Tensor(info.shape, info.type, target_tensor_ptr);
+    return Tensor(info.shape, tensor_type, target_tensor_ptr);
 }
 
 } // namespace turbo

@@ -5,16 +5,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Unlock AVX2 and FMA hardware intrinsics, OpenMP, and -O3 optimization
-add_compile_options(-mavx2 -mfma -fopenmp -O3)
+add_compile_options(-mavx2 -mfma -mf16c -fopenmp -O3)
 add_link_options(-fopenmp)
 
 add_executable(benchmark_gemm benchmarks/benchmark_gemm.cpp)
 target_link_libraries(benchmark_gemm PRIVATE tensor_lib OpenMP::OpenMP_CXX)
-target_compile_options(benchmark_gemm PRIVATE -O3 -mavx2 -mfma)
+target_compile_options(benchmark_gemm PRIVATE -O3 -mavx2 -mfma -mf16c)
+
+add_executable(benchmark_quant benchmarks/benchmark_quant.cpp)
+target_link_libraries(benchmark_quant PRIVATE tensor_lib OpenMP::OpenMP_CXX)
+target_compile_options(benchmark_quant PRIVATE -O3 -mavx2 -mfma -mf16c)
 
 include_directories(include)
 
-add_library(tensor_lib src/tensor/tensor.cpp src/nn/softmax.cpp src/nn/linear.cpp src/nn/swiglu.cpp src/nn/embedding.cpp src/nn/rmsnorm.cpp src/nn/rope.cpp src/nn/attention.cpp src/nn/ffn.cpp src/nn/transforrmer_block.cpp src/model/minigpt.cpp src/core/sampler.cpp src/core/generate.cpp)
+add_library(tensor_lib src/tensor/tensor.cpp src/nn/softmax.cpp src/nn/linear.cpp src/nn/swiglu.cpp src/nn/embedding.cpp src/nn/rmsnorm.cpp src/nn/rope.cpp src/nn/attention.cpp src/nn/ffn.cpp src/nn/transforrmer_block.cpp src/model/minigpt.cpp src/core/sampler.cpp src/core/generate.cpp src/core/tokenizer.cpp src/core/kv_cache.cpp)
 target_include_directories(tensor_lib PUBLIC include)
 
 find_package(OpenMP REQUIRED)
@@ -25,7 +29,7 @@ target_link_libraries(turbo PRIVATE tensor_lib)
 
 add_executable(run_generation examples/run_generation.cpp)
 target_link_libraries(run_generation PRIVATE tensor_lib OpenMP::OpenMP_CXX)
-target_compile_options(run_generation PRIVATE -O3 -mavx2 -mfma)
+target_compile_options(run_generation PRIVATE -O3 -mavx2 -mfma -mf16c)
 
 # Add the loader source to your core library
 target_sources(tensor_lib PRIVATE src/loader/gguf_loader.cpp)
@@ -38,3 +42,8 @@ target_link_libraries(run_loader PRIVATE tensor_lib)
 
 enable_testing()
 add_subdirectory(tests)
+
+# The Chat CLI Orchestrator
+add_executable(turbo_chat src/main.cpp)
+target_link_libraries(turbo_chat PRIVATE tensor_lib OpenMP::OpenMP_CXX)
+target_compile_options(turbo_chat PRIVATE -O3 -mavx2 -mfma -mf16c)

@@ -4,13 +4,36 @@
 #include <vector>
 #include <cstring>
 
+#include "turbo/tensor/quant_types.hpp"
+
 // Supported Data Types
 enum class DataType {
-  Float32,
-  Float16, // For mixed precision
-  Int8,    // For quantized weights
-  Int32    // For token IDs
+    FP32,       // Standard 32-bit Float
+    FP16,       // 16-bit Float (Often used for KV cache)
+    Q8_0,       // 8-bit Block Quantized
+    Q4_0,       // 4-bit Block Quantized
+    INT32       // For token IDs
 };
+
+// Helper function to determine block properties dynamically
+inline size_t get_block_size(DataType type) {
+    switch (type) {
+        case DataType::Q8_0: return QK8_0;
+        case DataType::Q4_0: return QK4_0;
+        default: return 1; // FP32, FP16, INT32 have a "block size" of 1
+    }
+}
+
+inline size_t get_type_size(DataType type) {
+    switch (type) {
+        case DataType::FP32: return 4;
+        case DataType::FP16: return 2;
+        case DataType::INT32: return 4;
+        case DataType::Q8_0: return sizeof(turbo::block_q8_0);
+        case DataType::Q4_0: return sizeof(turbo::block_q4_0);
+        default: return 0;
+    }
+}
 
 // Supported Hardware Devices
 enum class Device {
@@ -29,6 +52,9 @@ private:
     bool owns_memory_ = true; // Crucial guard flag
 
 public:
+    // Default constructor for empty storage
+    Storage() : data_(nullptr), size_bytes_(0), owns_memory_(false) {}
+
     // Standard allocating constructor
     explicit Storage(size_t size_bytes) 
         : size_bytes_(size_bytes), owns_memory_(true) {
@@ -74,7 +100,7 @@ private:
   std::vector<size_t> shape;
   std::vector<size_t> strides;
 
-  DataType dtype_ = DataType::Float32;
+  DataType dtype_ = DataType::FP32;
   Device device_ = Device::CPU;
 
   static std::vector<size_t> compute_strides(const std::vector<size_t> &shape);
@@ -84,29 +110,18 @@ private:
   static std::vector<size_t> unravel_index(size_t flat_index,
                                            const std::vector<size_t> &shape);
 
-  static size_t calculate_size_bytes(const std::vector<size_t>& shape, turbo::ggml_type type) {
-    size_t elements = 1;
-    for (auto dim : shape) elements *= dim;
-    
-    switch (type) {
-        case turbo::GGML_TYPE_F32:  return elements * sizeof(float);
-        case turbo::GGML_TYPE_F16:  return elements * sizeof(uint16_t);
-        case turbo::GGML_TYPE_Q4_0: return (elements / 32) * 18; 
-        case turbo::GGML_TYPE_Q8_0: return (elements / 32) * 34; 
-        default: return elements * sizeof(float);
-    }
-  }
-
 public:
   // Constructors
+  Tensor(); // Default constructor for empty state
   Tensor(std::vector<float> d, std::vector<size_t> s);
   Tensor(std::shared_ptr<Storage> st, size_t off, std::vector<size_t> s,
          std::vector<size_t> str);
          
   // NEW: Zero-copy mmap constructor
-  Tensor(const std::vector<size_t>& shape, turbo::ggml_type dtype, void* external_ptr);
+  Tensor(const std::vector<size_t>& shape, DataType dtype, void* external_ptr);
 
   // Metadata Queries
+  bool is_empty() const { return storage == nullptr || storage->data() == nullptr; }
   size_t rank() const { return shape.size(); }
   size_t numel() const;
   const std::vector<size_t> &get_shape() const { return shape; }
@@ -119,11 +134,13 @@ public:
   Tensor transpose() const;
   Tensor transpose(size_t dim0, size_t dim1) const;
   Tensor slice(size_t dim, size_t index) const;
+  Tensor slice(size_t dim, size_t start, size_t end) const;
   Tensor reshape(const std::vector<size_t> &new_shape) const;
   Tensor flatten() const;
   Tensor unsqueeze(size_t dim) const;
   Tensor squeeze(size_t dim) const;
   Tensor broadcast_to(const std::vector<size_t> &target_shape) const;
+  void copy_(const Tensor& src);
 
   // Math Operations
   Tensor operator+(const Tensor &other) const;
@@ -135,9 +152,10 @@ public:
   float &at(const std::vector<size_t> &indices);
   const float &at(const std::vector<size_t> &indices) const;
 
-  // Raw data access
+  // Data Access
   float *data_ptr();
   const float *data_ptr() const;
+  void *data_ptr_raw() const; // For quantized access
 
   // Utilities
   void print() const;

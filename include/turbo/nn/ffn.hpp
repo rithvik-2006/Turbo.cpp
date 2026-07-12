@@ -9,11 +9,14 @@ namespace nn {
 
 class FeedForward : public Layer {
 private:
-  Linear gate_up_proj;
+  Linear gate_proj;
+  Linear up_proj;
   SwiGLU swiglu;
   Linear down_proj;
 
 public:
+  // Zero-copy constructor
+  FeedForward(Tensor gate, Tensor down, Tensor up);
   // intermediate_size is typically 4x the embed_dim in standard models,
   // but around 8/3x in LLaMA models.
   FeedForward(size_t embed_dim, size_t intermediate_size);

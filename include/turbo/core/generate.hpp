@@ -2,14 +2,15 @@
 #include "../model/minigpt.hpp"
 #include <vector>
 
+#include "../core/tokenizer.hpp"
+#include <string>
+
 namespace turbo {
 
-std::vector<int> generate(MiniGPT& model, 
-                          std::vector<int> prompt_tokens, 
-                          int max_new_tokens, 
-                          int eos_token_id,
-                          bool use_greedy = false,
-                          float temperature = 1.0f, 
-                          float top_p = 0.9f);
+void generate_text(MiniGPT& model, 
+                   Tokenizer& tokenizer, 
+                   const std::string& prompt, 
+                   int max_tokens, 
+                   float temperature = 0.7f);
 
 } // namespace turbo

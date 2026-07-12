@@ -1,8 +1,12 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tensor_lib.dir/src/core/generate.cpp.o"
   "CMakeFiles/tensor_lib.dir/src/core/generate.cpp.o.d"
+  "CMakeFiles/tensor_lib.dir/src/core/kv_cache.cpp.o"
+  "CMakeFiles/tensor_lib.dir/src/core/kv_cache.cpp.o.d"
   "CMakeFiles/tensor_lib.dir/src/core/sampler.cpp.o"
   "CMakeFiles/tensor_lib.dir/src/core/sampler.cpp.o.d"
+  "CMakeFiles/tensor_lib.dir/src/core/tokenizer.cpp.o"
+  "CMakeFiles/tensor_lib.dir/src/core/tokenizer.cpp.o.d"
   "CMakeFiles/tensor_lib.dir/src/loader/gguf_loader.cpp.o"
   "CMakeFiles/tensor_lib.dir/src/loader/gguf_loader.cpp.o.d"
   "CMakeFiles/tensor_lib.dir/src/model/minigpt.cpp.o"
