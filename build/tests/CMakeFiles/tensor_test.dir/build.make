@@ -73,71 +73,71 @@ tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o: tests/CMakeFiles/tensor_test
 tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp
 tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o: tests/CMakeFiles/tensor_test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o -MF CMakeFiles/tensor_test.dir/test_tensor.cpp.o.d -o CMakeFiles/tensor_test.dir/test_tensor.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.o -MF CMakeFiles/tensor_test.dir/test_tensor.cpp.o.d -o CMakeFiles/tensor_test.dir/test_tensor.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp
 
 tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_test.dir/test_tensor.cpp.i"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp > CMakeFiles/tensor_test.dir/test_tensor.cpp.i
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp > CMakeFiles/tensor_test.dir/test_tensor.cpp.i
 
 tests/CMakeFiles/tensor_test.dir/test_tensor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_test.dir/test_tensor.cpp.s"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp -o CMakeFiles/tensor_test.dir/test_tensor.cpp.s
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tensor.cpp -o CMakeFiles/tensor_test.dir/test_tensor.cpp.s
 
 tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o: tests/CMakeFiles/tensor_test.dir/flags.make
 tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp
 tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o: tests/CMakeFiles/tensor_test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o -MF CMakeFiles/tensor_test.dir/test_nn.cpp.o.d -o CMakeFiles/tensor_test.dir/test_nn.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_nn.cpp.o -MF CMakeFiles/tensor_test.dir/test_nn.cpp.o.d -o CMakeFiles/tensor_test.dir/test_nn.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp
 
 tests/CMakeFiles/tensor_test.dir/test_nn.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_test.dir/test_nn.cpp.i"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp > CMakeFiles/tensor_test.dir/test_nn.cpp.i
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp > CMakeFiles/tensor_test.dir/test_nn.cpp.i
 
 tests/CMakeFiles/tensor_test.dir/test_nn.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_test.dir/test_nn.cpp.s"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp -o CMakeFiles/tensor_test.dir/test_nn.cpp.s
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_nn.cpp -o CMakeFiles/tensor_test.dir/test_nn.cpp.s
 
 tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o: tests/CMakeFiles/tensor_test.dir/flags.make
 tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp
 tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o: tests/CMakeFiles/tensor_test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o -MF CMakeFiles/tensor_test.dir/test_rope.cpp.o.d -o CMakeFiles/tensor_test.dir/test_rope.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_rope.cpp.o -MF CMakeFiles/tensor_test.dir/test_rope.cpp.o.d -o CMakeFiles/tensor_test.dir/test_rope.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp
 
 tests/CMakeFiles/tensor_test.dir/test_rope.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_test.dir/test_rope.cpp.i"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp > CMakeFiles/tensor_test.dir/test_rope.cpp.i
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp > CMakeFiles/tensor_test.dir/test_rope.cpp.i
 
 tests/CMakeFiles/tensor_test.dir/test_rope.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_test.dir/test_rope.cpp.s"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp -o CMakeFiles/tensor_test.dir/test_rope.cpp.s
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_rope.cpp -o CMakeFiles/tensor_test.dir/test_rope.cpp.s
 
 tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o: tests/CMakeFiles/tensor_test.dir/flags.make
 tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp
 tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o: tests/CMakeFiles/tensor_test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o -MF CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o.d -o CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o -MF CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o.d -o CMakeFiles/tensor_test.dir/test_tokenizer.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp
 
 tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_test.dir/test_tokenizer.cpp.i"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp > CMakeFiles/tensor_test.dir/test_tokenizer.cpp.i
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp > CMakeFiles/tensor_test.dir/test_tokenizer.cpp.i
 
 tests/CMakeFiles/tensor_test.dir/test_tokenizer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_test.dir/test_tokenizer.cpp.s"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp -o CMakeFiles/tensor_test.dir/test_tokenizer.cpp.s
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_tokenizer.cpp -o CMakeFiles/tensor_test.dir/test_tokenizer.cpp.s
 
 tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o: tests/CMakeFiles/tensor_test.dir/flags.make
 tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o: /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp
 tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o: tests/CMakeFiles/tensor_test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/manne-rithvik/CodingStuff/turbo.cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o -MF CMakeFiles/tensor_test.dir/test_quant.cpp.o.d -o CMakeFiles/tensor_test.dir/test_quant.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/tensor_test.dir/test_quant.cpp.o -MF CMakeFiles/tensor_test.dir/test_quant.cpp.o.d -o CMakeFiles/tensor_test.dir/test_quant.cpp.o -c /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp
 
 tests/CMakeFiles/tensor_test.dir/test_quant.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tensor_test.dir/test_quant.cpp.i"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp > CMakeFiles/tensor_test.dir/test_quant.cpp.i
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp > CMakeFiles/tensor_test.dir/test_quant.cpp.i
 
 tests/CMakeFiles/tensor_test.dir/test_quant.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tensor_test.dir/test_quant.cpp.s"
-	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp -o CMakeFiles/tensor_test.dir/test_quant.cpp.s
+	cd /home/manne-rithvik/CodingStuff/turbo.cpp/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/manne-rithvik/CodingStuff/turbo.cpp/tests/test_quant.cpp -o CMakeFiles/tensor_test.dir/test_quant.cpp.s
 
 # Object files for target tensor_test
 tensor_test_OBJECTS = \

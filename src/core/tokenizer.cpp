@@ -5,50 +5,113 @@
 #include <string>
 #include <queue>
 #include <climits>
+#include <algorithm>
 
 namespace turbo {
 
 Tokenizer::Tokenizer(const std::vector<std::string>& vocab, 
                      const std::vector<float>& scores,
+                     const std::vector<std::string>& merges,
+                     const std::vector<int32_t>& token_types,
+                     const std::string& model_type,
                      int bos_id, int eos_id, int unk_id) 
     : vocab_(vocab), bos_id_(bos_id), eos_id_(eos_id), unk_id_(unk_id) {
     
+    if (model_type == "gpt2") {
+        type_ = TokenizerType::BPE;
+        for (size_t i = 0; i < merges.size(); ++i) {
+            merge_ranks_[merges[i]] = static_cast<int>(i);
+        }
+    } else {
+        type_ = TokenizerType::SENTENCEPIECE;
+    }
+
     // Build fast lookup maps and merge ranks
     for (size_t i = 0; i < vocab_.size(); ++i) {
         token_to_id_[vocab_[i]] = i;
-        if (i < scores.size()) {
-            vocab_scores_[vocab_[i]] = scores[i];
-            merge_ranks_[vocab_[i]] = static_cast<int>(scores.size() - i); // Use inverse index as rank if scores aren't direct ranks
-        } else {
-            token_to_id_[vocab_[i]] = i;
+        if (type_ == TokenizerType::SENTENCEPIECE) {
+            if (i < scores.size()) {
+                vocab_scores_[vocab_[i]] = scores[i];
+            }
         }
     }
     
     // Populate known special tokens for TinyLlama
     special_tokens_["<s>"] = bos_id_;
     special_tokens_["</s>"] = eos_id_;
-    
-    // Try to find chat template special tokens in vocab to map them
-    std::vector<std::string> chat_tokens = {"<|system|>", "<|user|>", "<|assistant|>"};
-    for (const auto& ct : chat_tokens) {
-        auto it = token_to_id_.find(ct);
-        if (it != token_to_id_.end()) {
-            special_tokens_[ct] = it->second;
+    // Dynamically register all tokens marked as CONTROL type (3) in GGUF
+    for (size_t i = 0; i < vocab_.size(); ++i) {
+        if (i < token_types.size() && token_types[i] == 3) {
+            special_tokens_[vocab_[i]] = static_cast<int>(i);
         }
+    }
+
+    if (type_ == TokenizerType::BPE) {
+        build_byte_encoder();
     }
 }
 
 Tokenizer::Tokenizer(const GGUFLoader& loader)
-    : Tokenizer(loader.vocab_tokens(), loader.vocab_scores(), 1, 2, 0) {}
+    : Tokenizer(loader.vocab_tokens(), loader.vocab_scores(), loader.vocab_merges(), loader.vocab_token_types(), loader.tokenizer_model(), loader.bos_token_id(), loader.eos_token_id(), loader.unk_token_id()) {}
+
+std::string Tokenizer::codepoint_to_utf8(int cp) {
+    std::string result;
+    if (cp <= 0x7F) {
+        result += static_cast<char>(cp);
+    } else if (cp <= 0x7FF) {
+        result += static_cast<char>(0xC0 | ((cp >> 6) & 0x1F));
+        result += static_cast<char>(0x80 | (cp & 0x3F));
+    } else if (cp <= 0xFFFF) {
+        result += static_cast<char>(0xE0 | ((cp >> 12) & 0x0F));
+        result += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+        result += static_cast<char>(0x80 | (cp & 0x3F));
+    } else if (cp <= 0x10FFFF) {
+        result += static_cast<char>(0xF0 | ((cp >> 18) & 0x07));
+        result += static_cast<char>(0x80 | ((cp >> 12) & 0x3F));
+        result += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+        result += static_cast<char>(0x80 | (cp & 0x3F));
+    }
+    return result;
+}
+
+void Tokenizer::build_byte_encoder() {
+    std::vector<int> bs;
+    for (int i = static_cast<int>('!'); i <= static_cast<int>('~'); ++i) bs.push_back(i);
+    for (int i = 0xA1; i <= 0xAC; ++i) bs.push_back(i);
+    for (int i = 0xAE; i <= 0xFF; ++i) bs.push_back(i);
+
+    std::vector<int> cs = bs;
+    int n = 0;
+    for (int b = 0; b < 256; ++b) {
+        if (std::find(bs.begin(), bs.end(), b) == bs.end()) {
+            bs.push_back(b);
+            cs.push_back(256 + n);
+            n++;
+        }
+    }
+    for (size_t i = 0; i < bs.size(); ++i) {
+        std::string utf8_str = codepoint_to_utf8(cs[i]);
+        byte_encoder_[static_cast<uint8_t>(bs[i])] = utf8_str;
+        byte_decoder_[utf8_str] = static_cast<uint8_t>(bs[i]);
+    }
+}
 
 std::vector<int> Tokenizer::run_bpe(const std::string& text) {
     if (text.empty()) return {};
 
-    // TinyLlama usually requires prepending the Meta Space (U+2581) to words
-    std::string processed_text = "";
-    for (char c : text) {
-        if (c == ' ') processed_text += "\xe2\x96\x81";
-        else processed_text += c;
+    std::string processed_text = text;
+    if (type_ == TokenizerType::BPE) {
+        std::string remapped;
+        for (unsigned char c : text) {
+            remapped += byte_encoder_[c];
+        }
+        processed_text = remapped;
+    } else {
+        processed_text = "";
+        for (char c : text) {
+            if (c == ' ') processed_text += "\xe2\x96\x81";
+            else processed_text += c;
+        }
     }
 
     // Split text into individual characters/bytes to start
@@ -67,18 +130,28 @@ std::vector<int> Tokenizer::run_bpe(const std::string& text) {
     // Iteratively merge
     while (symbols.size() >= 2) {
         int best_idx = -1;
+        int lowest_rank = INT_MAX;
         float highest_score = -1e9f;
         std::string best_merge_str = "";
 
         // Find the adjacent pair with the highest priority score
         for (size_t i = 0; i < symbols.size() - 1; i++) {
-            std::string pair_str = symbols[i] + symbols[i+1];
-            
-            auto it = vocab_scores_.find(pair_str);
-            if (it != vocab_scores_.end() && it->second > highest_score) {
-                highest_score = it->second;
-                best_idx = i;
-                best_merge_str = pair_str;
+            if (type_ == TokenizerType::BPE) {
+                std::string pair_str = symbols[i] + " " + symbols[i+1];
+                auto it = merge_ranks_.find(pair_str);
+                if (it != merge_ranks_.end() && it->second < lowest_rank) {
+                    lowest_rank = it->second;
+                    best_idx = i;
+                    best_merge_str = symbols[i] + symbols[i+1];
+                }
+            } else {
+                std::string pair_str = symbols[i] + symbols[i+1];
+                auto it = vocab_scores_.find(pair_str);
+                if (it != vocab_scores_.end() && it->second > highest_score) {
+                    highest_score = it->second;
+                    best_idx = i;
+                    best_merge_str = pair_str;
+                }
             }
         }
 
@@ -99,18 +172,23 @@ std::vector<int> Tokenizer::run_bpe(const std::string& text) {
         if (it != token_to_id_.end()) {
             chunk_ids.push_back(it->second);
         } else {
-            // Byte fallback for unknown symbols
-            if (sym.length() == 1) {
-                char buf[7];
-                snprintf(buf, sizeof(buf), "<0x%02X>", static_cast<unsigned char>(sym[0]));
-                auto fallback_it = token_to_id_.find(buf);
-                if (fallback_it != token_to_id_.end()) {
-                    chunk_ids.push_back(fallback_it->second);
-                } else {
+            if (type_ == TokenizerType::BPE) {
+                std::cerr << "[WARNING] Unmapped BPE symbol: " << sym << "\n";
+                if (unk_id_ != -1) chunk_ids.push_back(unk_id_);
+            } else {
+                // Byte fallback for unknown symbols in SentencePiece
+                if (sym.length() == 1) {
+                    char buf[7];
+                    snprintf(buf, sizeof(buf), "<0x%02X>", static_cast<unsigned char>(sym[0]));
+                    auto fallback_it = token_to_id_.find(buf);
+                    if (fallback_it != token_to_id_.end()) {
+                        chunk_ids.push_back(fallback_it->second);
+                    } else if (unk_id_ != -1) {
+                        chunk_ids.push_back(unk_id_);
+                    }
+                } else if (unk_id_ != -1) {
                     chunk_ids.push_back(unk_id_);
                 }
-            } else {
-                chunk_ids.push_back(unk_id_);
             }
         }
     }
@@ -164,16 +242,6 @@ std::vector<int> Tokenizer::encode(const std::string& text, bool add_bos) {
         final_ids.insert(final_ids.end(), bpe_ids.begin(), bpe_ids.end());
     }
 
-    std::cout << "[TOKENIZER DEBUG] Final tokens: ";
-    for (int t : final_ids) {
-        if (t >= 0 && static_cast<size_t>(t) < vocab_.size()) {
-            std::cout << "[" << t << ": '" << vocab_[t] << "'] ";
-        } else {
-            std::cout << "[" << t << ": 'SPECIAL'] ";
-        }
-    }
-    std::cout << "\n";
-    
     return final_ids;
 }
 
@@ -198,11 +266,31 @@ std::string Tokenizer::decode(const std::vector<int>& ids) {
         }
     }
     
-    // SentencePiece De-normalization: replace U+2581 back with ' '
-    size_t pos = 0;
-    while ((pos = text.find("\xe2\x96\x81", pos)) != std::string::npos) {
-        text.replace(pos, 3, " ");
-        pos += 1;
+    if (type_ == TokenizerType::BPE) {
+        std::string decoded_text = "";
+        for (size_t i = 0; i < text.length(); ) {
+            unsigned char c = text[i];
+            size_t char_len = 1;
+            if ((c & 0xE0) == 0xC0) char_len = 2;
+            else if ((c & 0xF0) == 0xE0) char_len = 3;
+            else if ((c & 0xF8) == 0xF0) char_len = 4;
+            
+            std::string utf8_char = text.substr(i, char_len);
+            auto it = byte_decoder_.find(utf8_char);
+            if (it != byte_decoder_.end()) {
+                decoded_text += static_cast<char>(it->second);
+            } else {
+                decoded_text += utf8_char;
+            }
+            i += char_len;
+        }
+        text = decoded_text;
+    } else {
+        size_t pos = 0;
+        while ((pos = text.find("\xe2\x96\x81", pos)) != std::string::npos) {
+            text.replace(pos, 3, " ");
+            pos += 1;
+        }
     }
 
     return text;

@@ -36,11 +36,15 @@ void generate_text(MiniGPT& model, Tokenizer& tokenizer, const std::string& prom
     int generated_count = 0;
     while (generated_count < max_tokens) {
         // Sample the next token ID from the final position's logits
+        int seq_len = logits.get_shape()[1];
+        int vocab_size = logits.get_shape()[2];
+        float* last_token_logits = logits.data_ptr() + ((seq_len - 1) * vocab_size);
+
         int next_id;
         if (temperature > 0.0f) {
-            next_id = sample_top_p(logits, temperature, 0.9f);
+            next_id = sample_top_p(last_token_logits, vocab_size, temperature, 0.9f);
         } else {
-            next_id = greedy_sample(logits);
+            next_id = greedy_sample(last_token_logits, vocab_size);
         }
         
         // Break if we hit the End-of-Sequence token

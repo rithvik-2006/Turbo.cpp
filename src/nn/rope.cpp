@@ -47,11 +47,12 @@ void RoPE::apply_in_place(Tensor &x, size_t position_offset) {
 
   if (shape.size() == 4) {
     size_t batch = shape[0];
-    
-    // After transpose in attention.cpp, layout is [batch, num_heads, seq_len, head_dim]
+
+    // After transpose in attention.cpp, layout is [batch, num_heads, seq_len,
+    // head_dim]
     size_t num_heads_dim = shape[1];
     size_t seq_len_dim = shape[2];
-    
+
     for (size_t b = 0; b < batch; ++b) {
       for (size_t pos = 0; pos < seq_len_dim; ++pos) {
         size_t absolute_pos = position_offset + pos;
@@ -65,12 +66,12 @@ void RoPE::apply_in_place(Tensor &x, size_t position_offset) {
             float cos_val = cos_cache[cache_idx];
             float sin_val = sin_cache[cache_idx];
 
-            // GGUF permutes weights for interleaved RoPE
-            float x0 = x.at({b, h, pos, i * 2});
-            float x1 = x.at({b, h, pos, i * 2 + 1});
+            // Llama uses rotary-half (GPT-J) style: pair i with i+half_dim
+            float x0 = x.at({b, h, pos, i});
+            float x1 = x.at({b, h, pos, i + half_dim});
 
-            x.at({b, h, pos, i * 2}) = x0 * cos_val - x1 * sin_val;
-            x.at({b, h, pos, i * 2 + 1}) = x0 * sin_val + x1 * cos_val;
+            x.at({b, h, pos, i})           = x0 * cos_val - x1 * sin_val;
+            x.at({b, h, pos, i + half_dim}) = x0 * sin_val + x1 * cos_val;
           }
         }
       }
@@ -87,15 +88,17 @@ void RoPE::apply_in_place(Tensor &x, size_t position_offset) {
         float cos_val = cos_cache[cache_idx];
         float sin_val = sin_cache[cache_idx];
 
-        float x0 = x.at({pos, i * 2});
-        float x1 = x.at({pos, i * 2 + 1});
+        // Llama uses rotary-half (GPT-J) style: pair i with i+half_dim
+        float x0 = x.at({pos, i});
+        float x1 = x.at({pos, i + half_dim});
 
-        x.at({pos, i * 2}) = x0 * cos_val - x1 * sin_val;
-        x.at({pos, i * 2 + 1}) = x0 * sin_val + x1 * cos_val;
+        x.at({pos, i})           = x0 * cos_val - x1 * sin_val;
+        x.at({pos, i + half_dim}) = x0 * sin_val + x1 * cos_val;
       }
     }
   } else {
-    throw std::invalid_argument("RoPE apply_in_place currently supports 2D or 4D tensors.");
+    throw std::invalid_argument(
+        "RoPE apply_in_place currently supports 2D or 4D tensors.");
   }
 }
 

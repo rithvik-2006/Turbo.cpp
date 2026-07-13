@@ -43,17 +43,10 @@ Tensor Embedding::forward(const Tensor &input_ids) {
             output_data[d] = emb.at({d});
         }
     } else if (weight.dtype() == DataType::Q8_0) {
-        size_t row_bytes = (embedding_dim / 32) * 34;
-        const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
+        size_t row_bytes = (embedding_dim / 32) * sizeof(block_q8_0);
+        const uint8_t* compressed_row = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
         
-        const block_q8_0* x = reinterpret_cast<const block_q8_0*>(row_ptr);
-        int nb = embedding_dim / 32;
-        for (int b = 0; b < nb; b++) {
-            float d = fp16_to_fp32(x[b].d);
-            for (int j = 0; j < 32; j++) {
-                output_data[b * 32 + j] = x[b].qs[j] * d;
-            }
-        }
+        turbo::dequantize_row_q8_0(compressed_row, output_data.data(), embedding_dim);
     } else if (weight.dtype() == DataType::Q4_0) {
         size_t row_bytes = (embedding_dim / 32) * 18;
         const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
@@ -95,20 +88,11 @@ Tensor Embedding::forward(const Tensor &input_ids) {
         output.at({i, j}) = weight.at({j, token_id});
       }
     } else if (weight.dtype() == DataType::Q8_0) {
-      // It's [embedding_dim, num_embeddings] (i.e. [cols, rows])
-      // So there are `num_embeddings` rows and each row has `embedding_dim` elements!
-      // In llama.cpp, token_embd.weight is usually just copied as a row.
-      size_t row_bytes = (embedding_dim / 32) * 34; // QK8_0 is 32, block size is 34
-      const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
+      size_t row_bytes = (embedding_dim / 32) * sizeof(block_q8_0);
+      const uint8_t* compressed_row = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;
       
-      const block_q8_0* x = reinterpret_cast<const block_q8_0*>(row_ptr);
-      int nb = embedding_dim / 32;
-      for (int b = 0; b < nb; b++) {
-          float d = fp16_to_fp32(x[b].d);
-          for (int j = 0; j < 32; j++) {
-              output.at({i, b * 32 + j}) = x[b].qs[j] * d;
-          }
-      }
+      float* out_ptr = output.data_ptr() + (i * embedding_dim);
+      turbo::dequantize_row_q8_0(compressed_row, out_ptr, embedding_dim);
     } else if (weight.dtype() == DataType::Q4_0) {
       size_t row_bytes = (embedding_dim / 32) * 18; // QK4_0 is 32, block size is 18
       const uint8_t* row_ptr = static_cast<const uint8_t*>(weight.data_ptr_raw()) + token_id * row_bytes;

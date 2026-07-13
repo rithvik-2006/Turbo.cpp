@@ -28,21 +28,22 @@ private:
   Softmax softmax;
 
 public:
-public:
   // Zero-copy constructor
-  // Zero-copy constructor
-  MultiHeadAttention(Tensor q, Tensor k, Tensor v, Tensor o, 
-                     size_t embed_dim, size_t num_heads, size_t num_kv_heads, size_t max_seq_len = 4096);
+  MultiHeadAttention(Tensor q, Tensor k, Tensor v, Tensor o, size_t embed_dim,
+                     size_t num_heads, size_t num_kv_heads,
+                     size_t max_seq_len = 4096, float theta_base = 10000.0f);
 
   // Legacy constructor
   MultiHeadAttention(size_t embed_dim, size_t num_heads, size_t num_kv_heads,
-                     size_t max_seq_len = 4096);
+                     size_t max_seq_len = 4096, float theta_base = 10000.0f);
 
   // Standard forward pass (for Prefill phase)
   Tensor forward(const Tensor &input) override;
 
-  // Overloaded forward pass for Decode phase (requires position tracking for RoPE and KVCache)
-  Tensor forward(const Tensor &input, size_t position_offset, KVCache* kv_cache = nullptr, int layer_idx = -1);
+  // Overloaded forward pass for Decode phase (requires position tracking for
+  // RoPE and KVCache)
+  Tensor forward(const Tensor &input, size_t position_offset,
+                 KVCache *kv_cache = nullptr, int layer_idx = -1);
 };
 
 } // namespace nn

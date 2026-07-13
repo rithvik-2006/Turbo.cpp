@@ -19,7 +19,7 @@ TEST(TokenizerTest, BasicBPEEncodeDecode) {
         0.0f, 0.0f, 0.0f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.5f, 0.2f, 0.6f, 0.8f, 0.5f, 0.6f, 0.7f, 0.9f, 1.0f
     };
 
-    Tokenizer tokenizer(vocab, scores, 1, 2, 0);
+    Tokenizer tokenizer(vocab, scores, std::vector<std::string>(), std::vector<int32_t>(), "llama", 1, 2, 0);
 
     // 1. Test encoding "hello" without BOS
     std::vector<int> tokens_hello = tokenizer.encode("hello", false);
@@ -73,7 +73,7 @@ TEST(TokenizerTest, GGUFIntegration) {
         EXPECT_EQ(vocab[20], "hello");
 
         // Construct Tokenizer using GGUF loader vocab
-        Tokenizer tokenizer(vocab, scores, 1, 2, 0);
+        Tokenizer tokenizer(vocab, scores, std::vector<std::string>(), std::vector<int32_t>(), "llama", 1, 2, 0);
 
         std::vector<int> tokens = tokenizer.encode("hello world!", true);
         std::vector<int> expected = {1, 20, 10, 19, 11};
@@ -115,7 +115,7 @@ TEST(TokenizerTest, BPE_HelloWorld_Merge) {
     };
 
     // 2. Initialize the tokenizer (BOS=1, EOS=2, UNK=0)
-    Tokenizer tokenizer(vocab, scores, 1, 2, 0);
+    Tokenizer tokenizer(vocab, scores, std::vector<std::string>(), std::vector<int32_t>(), "llama", 1, 2, 0);
 
     // 3. (SentencePiece Pre-Processing is now internal to Tokenizer::encode)
     std::string prompt = "Hello World";

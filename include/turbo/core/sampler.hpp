@@ -3,8 +3,8 @@
 
 namespace turbo {
 
-int greedy_sample(const Tensor &logits);
+int greedy_sample(const float* last_token_logits, size_t vocab_size);
 
-int sample_top_p(const Tensor &logits, float temperature = 1.0f, float top_p = 0.9f);
+int sample_top_p(const float* last_token_logits, size_t vocab_size, float temperature, float top_p);
 
 } // namespace turbo

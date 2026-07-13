@@ -12,6 +12,22 @@ namespace turbo {
         return _cvtsh_ss(h);
     }
 
+    // Unpacks a single row of Q8_0 blocks into a standard FP32 array
+    inline void dequantize_row_q8_0(const void* v_x, float* y, int k) {
+        const int nb = k / QK8_0; // Number of blocks (e.g., 2048 / 32 = 64)
+        const block_q8_0* x = static_cast<const block_q8_0*>(v_x);
+        
+        for (int i = 0; i < nb; i++) {
+            // Extract the FP16 scale and convert to FP32
+            float d = fp16_to_fp32(x[i].d);
+            
+            // Unpack the 32 integers
+            for (int j = 0; j < QK8_0; j++) {
+                y[i * QK8_0 + j] = x[i].qs[j] * d;
+            }
+        }
+    }
+
     // Computes the dot product of a Q8_0 quantized vector and an FP32 vector
     inline float vec_dot_q8_0_f32(const int n, const void* v_x, const float* y) {
         // n must be a multiple of the block size (32)

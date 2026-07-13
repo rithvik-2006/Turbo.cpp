@@ -1,0 +1,45 @@
+GGUF Version: 3
+KV Pairs: 35 | Tensors: 147
+[GGUF] Key: general.architecture (type: 8)
+[GGUF] Key: general.type (type: 8)
+[GGUF] Key: general.name (type: 8)
+[GGUF] Key: general.finetune (type: 8)
+[GGUF] Key: general.basename (type: 8)
+[GGUF] Key: general.size_label (type: 8)
+[GGUF] Key: general.license (type: 8)
+[GGUF] Key: general.tags (type: 9)
+[GGUF] Key: general.languages (type: 9)
+[GGUF] Key: llama.block_count (type: 4)
+[GGUF] Key: llama.context_length (type: 4)
+[GGUF] Key: llama.embedding_length (type: 4)
+[GGUF] Key: llama.feed_forward_length (type: 4)
+[GGUF] Key: llama.attention.head_count (type: 4)
+[GGUF] Key: llama.attention.head_count_kv (type: 4)
+[GGUF] Key: llama.rope.freq_base (type: 6)
+[GGUF] Key: llama.attention.layer_norm_rms_epsilon (type: 6)
+[GGUF] Key: llama.attention.key_length (type: 4)
+[GGUF] Key: llama.attention.value_length (type: 4)
+[GGUF] Key: general.file_type (type: 4)
+[GGUF] Key: llama.vocab_size (type: 4)
+[GGUF] Key: llama.rope.dimension_count (type: 4)
+[GGUF] Key: tokenizer.ggml.model (type: 8)
+[GGUF] Key: tokenizer.ggml.pre (type: 8)
+[GGUF] Key: tokenizer.ggml.tokens (type: 9)
+[GGUF] Key: tokenizer.ggml.token_type (type: 9)
+[GGUF] Key: tokenizer.ggml.merges (type: 9)
+[GGUF] Key: tokenizer.ggml.bos_token_id (type: 4)
+[GGUF] Key: tokenizer.ggml.eos_token_id (type: 4)
+[GGUF] Key: tokenizer.chat_template (type: 8)
+[GGUF] Key: general.quantization_version (type: 4)
+[GGUF] Key: quantize.imatrix.file (type: 8)
+[GGUF] Key: quantize.imatrix.dataset (type: 8)
+[GGUF] Key: quantize.imatrix.entries_count (type: 5)
+[GGUF] Key: quantize.imatrix.chunks_count (type: 5)
+[INFO] Parsed 128256 vocabulary tokens.
+[INFO] BOS Token ID resolved to: 128000
+
+--- Fetching Target Weight Vector via Zero-Copy ---
+Successfully bound weight: blk.0.attn_q.weight
+Data Address in RAM: 0x74e6197f4080
+Dimensions Tracked: 2
+Format Code (ggml_type): 2

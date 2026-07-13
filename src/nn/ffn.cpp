@@ -1,5 +1,7 @@
 // src/nn/ffn.cpp
 #include "../../include/turbo/nn/ffn.hpp"
+#include <iostream>
+#include <cmath>
 
 namespace turbo {
 namespace nn {

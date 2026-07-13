@@ -20,7 +20,7 @@ int main() {
     turbo::GGUFLoader loader("dummy.gguf");
     loader.parse();
     
-    turbo::Tokenizer tokenizer(loader.vocab_tokens(), loader.vocab_scores());
+    turbo::Tokenizer tokenizer(loader);
 
     // Mock prompt
     std::string prompt = "Hello World, this is the Turbo Engine speaking.";

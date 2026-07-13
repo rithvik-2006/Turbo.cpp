@@ -10,27 +10,12 @@
 
 namespace turbo {
 
-int greedy_sample(const Tensor &logits) {
-  // Ensure we are working with a 2D or 3D tensor
-  if (logits.rank() < 2) {
-    throw std::runtime_error("Logits tensor must have at least 2 dimensions.");
-  }
-
-  // We only care about the very last token's predictions
-  size_t vocab_size = logits.get_shape().back();
-  size_t total_elements = logits.numel();
-
-  // Calculate the physical memory offset for the final row
-  size_t last_row_start = total_elements - vocab_size;
-
+int greedy_sample(const float* last_token_logits, size_t vocab_size) {
   float max_val = -std::numeric_limits<float>::infinity();
   int max_index = 0;
 
-  // Direct pointer access bypasses .at() for maximum performance
-  const float *data_ptr = logits.data_ptr();
-
   for (size_t i = 0; i < vocab_size; ++i) {
-    float current_val = data_ptr[last_row_start + i];
+    float current_val = last_token_logits[i];
     if (current_val > max_val) {
       max_val = current_val;
       max_index = static_cast<int>(i);
@@ -40,21 +25,13 @@ int greedy_sample(const Tensor &logits) {
   return max_index;
 }
 
-int sample_top_p(const Tensor& logits, float temperature, float top_p) {
-    if (logits.rank() < 2) {
-        throw std::runtime_error("Logits tensor must be at least 2D.");
-    }
-
-    size_t vocab_size = logits.get_shape().back();
-    size_t last_row_start = logits.numel() - vocab_size;
-    const float* data_ptr = logits.data_ptr();
-
-    // 1. Extract the last row and apply Temperature
+int sample_top_p(const float* last_token_logits, size_t vocab_size, float temperature, float top_p) {
+    // 1. Apply Temperature
     std::vector<float> scaled_logits(vocab_size);
     float max_logit = -std::numeric_limits<float>::infinity();
     
     for (size_t i = 0; i < vocab_size; ++i) {
-        scaled_logits[i] = data_ptr[last_row_start + i] / temperature;
+        scaled_logits[i] = last_token_logits[i] / temperature;
         if (scaled_logits[i] > max_logit) {
             max_logit = scaled_logits[i];
         }
